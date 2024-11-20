@@ -3,6 +3,7 @@
 
 #include "Hospital.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -28,19 +29,39 @@ public:
 
 };
 
+// Clase Cita
+class Cita {
+public:
+    unique_ptr<Paciente> paciente;
+    unique_ptr<Medico> medico;
+    string fecha;
+    int urgencia; // 1: baja, 2: media, 3: alta
+
+};
+
+// Clase Hospital
+class Hospital {
+private:
+    vector<unique_ptr<Paciente>> pacientes;
+    vector<unique_ptr<Medico>> medicos;
+    vector<unique_ptr<Cita>> citas;
+
+};
+
 int main()
 {
     int opcion;
     while (true) {
         cout << "------Menu------\n";
         cout << "1. Salir\n";
+        cout << "\nIntroduce un numero: ";
         cin >> opcion;
 
         switch (opcion) {
         case 1:
             return 0;
         default:
-            cout << "Opcion invalida. Intente de nuevo.\n";
+            cout << "\nOpcion invalida. Intente de nuevo.\n";
         }
     }
 
