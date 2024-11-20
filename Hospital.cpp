@@ -30,8 +30,21 @@ public:
 
 int main()
 {
-	cout << "Hello CMake." << endl;
-	return 0;
+    int opcion;
+    while (true) {
+        cout << "------Menu------\n";
+        cout << "1. Salir\n";
+        cin >> opcion;
+
+        switch (opcion) {
+        case 1:
+            return 0;
+        default:
+            cout << "Opcion invalida. Intente de nuevo.\n";
+        }
+    }
+
+    return 0;
 }
 
 
