@@ -16,6 +16,19 @@ public:
     string fechaIngreso;
     string historialClinico;
 
+    Paciente(int id, string nombre, string fechaIngreso)
+        : id(id), nombre(nombre), fechaIngreso(fechaIngreso), historialClinico("") {
+    }
+
+    void agregarHistorial(string info) {
+        historialClinico += info + "\n";
+    }
+
+    void mostrarInfo() const {
+        cout << "Nombre: " << nombre << ", ID: " << id << ", Fecha de Ingreso: " << fechaIngreso << "\n";
+        cout << "Historial Clínico: " << historialClinico << "\n";
+    }
+
 };
 
 // Clase Medico
@@ -46,19 +59,36 @@ private:
     vector<unique_ptr<Medico>> medicos;
     vector<unique_ptr<Cita>> citas;
 
+    public:
+        void agregarPaciente(int id, string nombre, string fechaIngreso) {
+            pacientes.emplace_back(make_unique<Paciente>(id, nombre, fechaIngreso));
+    }
+
 };
 
 int main()
 {
+    Hospital hospital;
     int opcion;
+
     while (true) {
         cout << "------Menu------\n";
-        cout << "1. Salir\n";
+        cout << "1. Agregar paciente\n";
+        cout << "2. Salir\n";
         cout << "\nIntroduce un numero: ";
         cin >> opcion;
 
         switch (opcion) {
-        case 1:
+
+        case 1: {
+            int id; 
+            string nombre, fechaIngreso;
+            cout << "Ingrese nombre y fecha de ingreso del paciente: ";
+            cin >> id >> nombre >> fechaIngreso;
+            hospital.agregarPaciente(id, nombre, fechaIngreso);
+            break;
+        }
+        case 2:
             return 0;
         default:
             cout << "\nOpcion invalida. Intente de nuevo.\n";
