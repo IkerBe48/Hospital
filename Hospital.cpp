@@ -8,6 +8,7 @@
 #include <memory>  // Para usar unique_ptr
 #include <string>  // Para usar std::string y getline
 #include <limits>  // Para usar std::numeric_limits
+#include <sstream> // Para usar std::istringstream
 
 using namespace std;
 
@@ -63,52 +64,38 @@ private:
     vector<unique_ptr<Medico>> medicos;
     vector<unique_ptr<Cita>> citas;
 
-    void crearArchivoCSV() {
+    void crearPacientesCSV() {
         // Intentar abrir el archivo en modo lectura
         ifstream archivo("Pacientes.csv");
 
         // Si el archivo no existe, lo creamos y escribimos los encabezados
-        cout << "1\n";
         if (!archivo) {
-            cout << "2\n";
             ofstream archivoSalida("Pacientes.csv");
             if (archivoSalida.is_open()) {
-                cout << "3\n";
                 archivoSalida << "ID,Nombre,Fecha de Ingreso\n"; // Escribir encabezados
                 cout << "Archivo creado y encabezados escritos.\n"; // Mensaje de depuración
                 archivoSalida.close();
-                cout << "4\n";
             }
             else {
-                cout << "5\n";
                 cout << "No se pudo abrir el archivo para crear.\n";
             }
         }
         else {
-            cout << "6\n";
             // Verificar si el archivo está vacío
             if (archivo.peek() == std::ifstream::traits_type::eof()) {
-                cout << "7\n";
                 // Si está vacío, escribir el encabezado
                 ofstream archivoSalida("Pacientes.csv", ios::app);
-                cout << "8\n";
                 if (archivoSalida.is_open()) {
-                    cout << "9\n";
-                    archivoSalida << "ID,Nombre,Fecha de Ingreso\n"; // Escribir encabezados
+                    archivoSalida << "ID,Nombre,Fecha de Ingreso111\n"; // Escribir encabezados
                     cout << "Encabezados escritos en el archivo vacío.\n"; // Mensaje de depuración
                     archivoSalida.close();
-                    cout << "10\n";
                 }
                 else {
-                    cout << "11\n";
                     cout << "No se pudo abrir el archivo para agregar encabezados.\n";
-                    cout << "12\n";
                 }
             }
             else {
-                cout << "13\n";
                 cout << "El archivo ya existe y no está vacío, no se escribieron encabezados.\n"; // Mensaje si el archivo ya existe y no está vacío
-                cout << "14\n";
             }
         }
 
@@ -138,26 +125,60 @@ private:
 
     bool guardarPacienteEnCSV(const Paciente& paciente) {
     ofstream archivo("Pacientes.csv", ios::app); 
-    if (archivo.is_open()) {
-        cout << "Archivo abierto correctamente.\n"; 
-        // Escribir encabezados solo si el archivo está vacío
-        /*if (archivo.tellp() == 0) {
-            archivo << "ID,Nombre,Fecha de Ingreso\n";
-            cout << "Encabezados escritos.\n"; // Mensaje de depuración 
-        }*/
-        archivo << paciente.id << "," << paciente.nombre << "," << paciente.fechaIngreso << "\n";
-        cout << "Datos del paciente escritos: " << paciente.id << ", " << paciente.nombre << ", " << paciente.fechaIngreso << "\n"; // Mensaje de depuración
-        archivo.close();
-        return true; // Indica que se guardó correctamente
-    } else {
-        cout << "No se pudo abrir el archivo para escribir.\n";
-        return false; // Indica que hubo un error al abrir el archivo
+        if (archivo.is_open()) {
+            cout << "Archivo abierto correctamente.\n"; 
+            // Escribir encabezados solo si el archivo está vacío
+            /*if (archivo.tellp() == 0) {
+                archivo << "ID,Nombre,Fecha de Ingreso\n";
+                cout << "Encabezados escritos.\n"; // Mensaje de depuración 
+            }*/
+            archivo << paciente.id << "," << paciente.nombre << "," << paciente.fechaIngreso << "\n";
+            cout << "Datos del paciente escritos: " << paciente.id << ", " << paciente.nombre << ", " << paciente.fechaIngreso << "\n"; // Mensaje de depuración
+            archivo.close();
+            return true; // Indica que se guardó correctamente
+        } else {
+            cout << "No se pudo abrir el archivo para escribir.\n";
+            return false; // Indica que hubo un error al abrir el archivo
+        }
     }
-}
+
+    void buscarPaciente(const std::string& nombreBuscado) {
+        std::ifstream archivo("Pacientes.csv");
+        std::string linea;
+        bool encontrado = false;
+
+        if (!archivo.is_open()) {
+            std::cerr << "Error al abrir el archivo." << std::endl;
+            return;
+        }
+
+        while (std::getline(archivo, linea)) {
+            std::istringstream stream(linea);
+            std::string id, nombre;
+
+            // Leer la primera columna (ID) y descartarla
+            std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
+            // Leer la segunda columna (nombre)
+            std::getline(stream, nombre, ','); // Asumiendo que el nombre es la segunda columna
+
+            if (nombre == nombreBuscado) {
+                encontrado = true;
+                std::cout << "Paciente encontrado: " << linea << std::endl;
+                break; // Salimos del bucle si encontramos al paciente
+            }
+        }
+
+        if (!encontrado) {
+            std::cout << "Paciente no encontrado." << std::endl;
+        }
+
+        archivo.close();
+    }
+    
     public:
         void agregarPaciente(const string& nombre, const string& fechaIngreso) {
             // Verifica si el archivo CSV existe y crea si no existe
-            crearArchivoCSV();
+            crearPacientesCSV();
 
             int nuevoId = obtenerMaxId() + 1; // Obtener el máximo ID y sumarle 1
             auto nuevoPaciente = make_unique<Paciente>(nuevoId, nombre, fechaIngreso);
@@ -170,6 +191,119 @@ private:
             }
         }
 
+        void buscarPacientePorNombre() {
+            string nombre;
+            cout << "Ingrese el nombre del paciente a buscar: ";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Limpiar el buffer de entrada
+            getline(cin, nombre); // Leer nombre completo
+            buscarPaciente(nombre); // Llamar al método de búsqueda
+        }
+
+        void eliminarPaciente(const std::string& nombreBuscado) {
+            std::ifstream archivo("Pacientes.csv");
+            std::vector<std::string> lineas;
+            std::string linea;
+            bool encontrado = false;
+
+            if (!archivo.is_open()) {
+                std::cerr << "Error al abrir el archivo." << std::endl;
+                return;
+            }
+
+            // Leer todas las líneas del archivo y almacenar en un vector
+            while (std::getline(archivo, linea)) {
+                std::istringstream stream(linea);
+                std::string id, nombre;
+
+                std::getline(stream, id, ','); // Leer ID
+                std::getline(stream, nombre, ','); // Leer nombre
+
+                // Si el nombre no coincide con el buscado, lo guardamos
+                if (nombre != nombreBuscado) {
+                    lineas.push_back(linea);
+                }
+                else {
+                    encontrado = true; // Marcar que encontramos el paciente
+                }
+            }
+
+            archivo.close(); // Cerrar el archivo después de leer
+
+            // Si encontramos el paciente, escribimos de nuevo el archivo sin él
+            if (encontrado) {
+                std::ofstream archivoSalida("Pacientes.csv");
+                if (archivoSalida.is_open()) {
+                    // Escribir el encabezado
+                    //archivoSalida << "ID,Nombre,Fecha de Ingreso222\n"; Comentado por crear mas de un encabezado
+                    // Escribir todas las líneas restantes
+                    for (const auto& l : lineas) {
+                        archivoSalida << l << "\n";
+                    }
+                    archivoSalida.close();
+                    std::cout << "Paciente '" << nombreBuscado << "' eliminado correctamente." << std::endl;
+                }
+                else {
+                    std::cerr << "Error al abrir el archivo para escribir." << std::endl;
+                }
+            }
+            else {
+                std::cout << "Paciente '" << nombreBuscado << "' no encontrado." << std::endl;
+            }
+        }
+
+        void modificarNombrePaciente(const std::string& nombreBuscado, const std::string& nuevoNombre) {
+            std::ifstream archivo("Pacientes.csv");
+            std::vector<std::string> lineas;
+            std::string linea;
+            bool encontrado = false;
+
+            if (!archivo.is_open()) {
+                std::cerr << "Error al abrir el archivo." << std::endl;
+                return;
+            }
+
+            // Leer todas las líneas del archivo y almacenar en un vector
+            while (std::getline(archivo, linea)) {
+                std::istringstream stream(linea);
+                std::string id, nombre, fechaIngreso;
+
+                std::getline(stream, id, ','); // Leer ID
+                std::getline(stream, nombre, ','); // Leer nombre
+                std::getline(stream, fechaIngreso); // Leer fecha de ingreso
+
+                // Si el nombre coincide con el buscado, lo modificamos
+                if (nombre == nombreBuscado) {
+                    nombre = nuevoNombre; // Cambiar el nombre al nuevo
+                    encontrado = true; // Marcar que encontramos el paciente
+                }
+
+                // Volver a formar la línea con el nombre (modificado o no)
+                lineas.push_back(id + "," + nombre + "," + fechaIngreso);
+            }
+
+            archivo.close(); // Cerrar el archivo después de leer
+
+            // Si encontramos el paciente, escribimos de nuevo el archivo con el nombre modificado
+            if (encontrado) {
+                std::ofstream archivoSalida("Pacientes.csv");
+                if (archivoSalida.is_open()) {
+                    // Escribir el encabezado
+                    //archivoSalida << "ID,Nombre,Fecha de Ingreso\n"; Comentado por posible fallo
+                    // Escribir todas las líneas restantes
+                    for (const auto& l : lineas) {
+                        archivoSalida << l << "\n";
+                    }
+                    archivoSalida.close();
+                    std::cout << "Nombre del paciente '" << nombreBuscado << "' modificado a '" << nuevoNombre << "' correctamente." << std::endl;
+                }
+                else {
+                    std::cerr << "Error al abrir el archivo para escribir." << std::endl;
+                }
+            }
+            else {
+                std::cout << "Paciente '" << nombreBuscado << "' no encontrado." << std::endl;
+            }
+        }
 };
 
 int main()
@@ -180,7 +314,10 @@ int main()
     while (true) {
         cout << "------Menu------\n";
         cout << "1. Agregar paciente\n";
-        cout << "2. Salir\n";
+        cout << "2. Buscar paciente por nombre\n";
+        cout << "3. Eliminar paciente por nombre\n";
+        cout << "4. Modificar nombre de paciente\n";
+        cout << "5. Salir\n";
         cout << "\nIntroduce un numero: ";
         cin >> opcion;
 
@@ -199,6 +336,27 @@ int main()
             break;
         }
         case 2:
+            hospital.buscarPacientePorNombre(); // Llamar al método de búsqueda
+            break;
+        case 3: {
+            string nombreBuscado;
+            cin.ignore(); // Limpiar el buffer de entrada
+            cout << "Ingrese el nombre del paciente a eliminar: ";
+            getline(cin, nombreBuscado); // Leer nombre del paciente a eliminar
+            hospital.eliminarPaciente(nombreBuscado); // Llamar al método de eliminación
+            break;
+        }
+        case 4: {
+            string nombreBuscado, nuevoNombre;
+            cin.ignore(); // Limpiar el buffer de entrada
+            cout << "Ingrese el nombre del paciente a modificar: ";
+            getline(cin, nombreBuscado); // Leer nombre del paciente a modificar
+            cout << "Ingrese el nuevo nombre del paciente: ";
+            getline(cin, nuevoNombre); // Leer nuevo nombre
+            hospital.modificarNombrePaciente(nombreBuscado, nuevoNombre); // Llamar al método de modificación
+            break;
+        }
+        case 5:
             return 0;
         default:
             cout << "\nOpcion invalida. Intente de nuevo.\n";
