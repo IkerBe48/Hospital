@@ -706,39 +706,40 @@ private:
         // Modificar la función agregarCita
         void agregarCita(const string & nombrePaciente, const string & nombreMedico, const string & fecha, int urgencia) {
                 // Verifica si el archivo CSV existe y crea si no existe
-                   crearCitasCSV();
+                crearCitasCSV();
             
-                  // Verificar si el paciente y el médico existen en sus respectivos archivos
-                  if (!buscarPacienteEnCSV(nombrePaciente)) {
-                      cout << "El paciente '" << nombrePaciente << "' no existe en el sistema. No se puede agregar la cita." << endl;
-                      return;
+                // Verificar si el paciente y el médico existen en sus respectivos archivos
+                if (!buscarPacienteEnCSV(nombrePaciente)) {
+                    cout << "El paciente '" << nombrePaciente << "' no existe en el sistema. No se puede agregar la cita." << endl;
+                    return;
                
-            }
+                }
             
-                    if (!buscarMedicoEnCSV(nombreMedico)) {
-                        cout << "El médico '" << nombreMedico << "' no existe en el sistema. No se puede agregar la cita." << endl;
-                        return;
+                if (!buscarMedicoEnCSV(nombreMedico)) {
+                      cout << "El médico '" << nombreMedico << "' no existe en el sistema. No se puede agregar la cita." << endl;
+                      return;
                 
-            }
+                }
             
-                    int nuevoId = obtenerMaxIdCitas() + 1; // Obtener el máximo ID y sumarle 1
-               auto paciente = make_unique<Paciente>(nuevoId, nombrePaciente, ""); // Crear paciente temporal
-               auto medico = make_unique<Medico>(nuevoId, nombreMedico, ""); // Crear medico temporal
-               auto nuevaCita = make_unique<Cita>(move(paciente), move(medico), fecha, urgencia);
+                int nuevoId = obtenerMaxIdCitas() + 1; // Obtener el máximo ID y sumarle 1
+                auto paciente = make_unique<Paciente>(nuevoId, nombrePaciente, ""); // Crear paciente temporal
+                auto medico = make_unique<Medico>(nuevoId, nombreMedico, ""); // Crear medico temporal
+                auto nuevaCita = make_unique<Cita>(move(paciente), move(medico), fecha, urgencia);
            
-             if (guardarCitaEnCSV(*nuevaCita)) { // Guardar en CSV
-                 citas.emplace_back(move(nuevaCita)); // Agregar cita a la lista
-                 cout << "Cita agregada correctamente con ID: " << nuevoId << "\n";
+                if (guardarCitaEnCSV(*nuevaCita)) { // Guardar en CSV
+                    citas.emplace_back(move(nuevaCita)); // Agregar cita a la lista
+                    cout << "Cita agregada correctamente con ID: " << nuevoId << "\n";
            
-            }
+                }
                 else {
-                        cout << "Error al agregar la cita. Intente nuevamente.\n";
+                            cout << "Error al agregar la cita. Intente nuevamente.\n";
                 
-            }
+                }
             
         }
 
         //FIN FUNCIONES CITAS//
+
 };
 
 int main()
