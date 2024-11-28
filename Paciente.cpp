@@ -1,23 +1,27 @@
 #include "Paciente.h"
-#include <fstream>
-#include <sstream>
-#include <limits>
+#include <iostream>
 #include <vector>
-#include <memory>  // Para usar unique_ptr
-#include <string>  // Para usar std::string y getline
+#include <fstream>
+#include <memory>
+#include <string>
+#include <limits>
+#include <sstream>
+#include <stdexcept> // Para std::runtime_error
 
-Paciente::Paciente(int id, std::string nombre, std::string fechaIngreso)
-    : id(id), nombre(nombre), fechaIngreso(fechaIngreso), historialClinico("") {
+std::vector<std::unique_ptr<Paciente>> Paciente::pacientes; // Inicializar el vector de médicos
+
+Paciente::Paciente(int id, const std::string& nombre, const std::string& fechaIngreso)
+    : id(id), nombre(nombre), fechaIngreso(fechaIngreso) {
 }
 
-void Paciente::agregarHistorial(std::string info) {
+/*void Paciente::agregarHistorial(std::string info) {
     historialClinico += info + "\n";
 }
 
 void Paciente::mostrarInfo() const {
     std::cout << "Nombre: " << nombre << ", ID: " << id << ", Fecha de Ingreso: " << fechaIngreso << "\n";
     std::cout << "Historial Clínico: " << historialClinico << "\n";
-}
+}*/
 
 void Paciente::crearPacientesCSV() {
     std::ifstream archivo("Pacientes.csv");
@@ -111,12 +115,24 @@ void Paciente::buscarPaciente(const std::string& nombreBuscado) {
     archivo.close();
 }
 
+
 void Paciente::agregarPaciente(const std::string& nombre, const std::string& fechaIngreso) {
+    // Validar los datos de entrada
+    if (nombre.empty()) {
+        std::cout << "Error: El nombre no puede estar vacío.\n";
+        return;
+    }
+
+    if (fechaIngreso.empty()) {
+        std::cout << "Error: La fecha de ingreso no puede estar vacía.\n";
+        return;
+    }
     crearPacientesCSV();
 
-    int nuevoId = obtenerMaxId() + 1; // Obtener el máximo ID y sumarle 1
-    Paciente nuevoPaciente(nuevoId, nombre, fechaIngreso); // Crear el paciente directamente
-    if (guardarPacienteEnCSV(nuevoPaciente)) { // Guardar en CSV
+    int nuevoId = obtenerMaxId() + 1;
+    auto nuevoPaciente = std::make_unique<Paciente>(nuevoId, nombre, fechaIngreso);
+    if (guardarPacienteEnCSV(*nuevoPaciente)) {
+        pacientes.emplace_back(std::move(nuevoPaciente));
         std::cout << "Paciente agregado correctamente con ID: " << nuevoId << "\n";
     }
     else {
@@ -124,12 +140,8 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
     }
 }
 
-void Paciente::buscarPacientePorNombre() {
-    std::string nombre;
-    std::cout << "Ingrese el nombre del paciente a buscar: ";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Limpiar el buffer de entrada
-    std::getline(std::cin, nombre); // Leer nombre completo
-    buscarPaciente(nombre); // Llamar al método de búsqueda
+void Paciente::buscarPacientePorNombre(const std::string& nombreBuscado) {
+    buscarPaciente(nombreBuscado); // Llamar al método de búsqueda
 }
 
 void Paciente::eliminarPaciente(const std::string& nombreBuscado) {

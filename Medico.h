@@ -8,6 +8,8 @@
 
 class Medico {
 public:
+    static std::vector<std::unique_ptr<Medico>> medicos;  // Almacena los médicos
+
     Medico(int id, const std::string& nombre, const std::string& especialidad);
     std::string getNombre() const { return nombre; }
 
@@ -17,16 +19,14 @@ public:
     static bool guardarMedicoEnCSV(const Medico& medico);
     static void buscarMedico(const std::string& nombreBuscado);
     static void agregarMedico(const std::string& nombre, const std::string& especialidad);
-    static void buscarMedicoPorNombre();
+    static void buscarMedicoPorNombre(const std::string& nombreBuscado);
     static void eliminarMedico(const std::string& nombreBuscado);
     static void modificarNombreMedico(const std::string& nombreBuscado, const std::string& nuevoNombre);
 
 private:
     int id;
     std::string nombre;
-    std::string especialidad;
-
-    static std::vector<std::unique_ptr<Medico>> medicos; // Almacena los médicos
+    std::string especialidad;    
 };
 
 #endif // MEDICO_H

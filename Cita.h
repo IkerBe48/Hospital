@@ -13,6 +13,9 @@ class Medico;   // Declaración anticipada
 
 class Cita {
 public:
+
+    static std::vector<std::unique_ptr<Cita>> citas; // Almacena las citas
+
     Cita(std::unique_ptr<Paciente> paciente, std::unique_ptr<Medico> medico, const std::string& fecha, int urgencia);
 
     static void crearCitasCSV();
@@ -27,7 +30,6 @@ private:
     std::unique_ptr<Medico> medico;
     std::string fecha;
     int urgencia;
-    static std::vector<std::unique_ptr<Cita>> citas; // Almacena las citas
 };
 
 #endif // CITA_H

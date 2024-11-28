@@ -8,6 +8,8 @@
 #include <limits>  // Para usar std::numeric_limits
 #include <sstream> // Para usar std::istringstream
 
+std::vector<std::unique_ptr<Cita>> Cita::citas;
+
 Cita::Cita(std::unique_ptr<Paciente> paciente, std::unique_ptr<Medico> medico, const std::string& fecha, int urgencia)
     : paciente(std::move(paciente)), medico(std::move(medico)), fecha(fecha), urgencia(urgencia) {
 }

@@ -125,12 +125,8 @@ void Medico::agregarMedico(const std::string& nombre, const std::string& especia
     }
 }
 
-void Medico::buscarMedicoPorNombre() {
-    std::string nombre;
-    std::cout << "Ingrese el nombre del medico a buscar: ";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::getline(std::cin, nombre);
-    buscarMedico(nombre);
+void Medico::buscarMedicoPorNombre(const std::string& nombreBuscado) {
+    buscarMedico(nombreBuscado);
 }
 
 void Medico::eliminarMedico(const std::string& nombreBuscado) {
