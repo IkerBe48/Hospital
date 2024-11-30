@@ -121,8 +121,21 @@ void Hospital::menu() {
             std::getline(std::cin, nombreMedico);
             std::cout << "Ingrese fecha de la cita: ";
             std::getline(std::cin, fecha);
-            std::cout << "Ingrese urgencia (1: baja, 2: media, 3: alta): ";
-            std::cin >> urgencia;
+            while (true) {
+                std::cout << "Ingrese urgencia (1: baja, 2: media, 3: alta): ";
+                std::cin >> urgencia;
+
+                // Verificar si la entrada es válida
+                if (std::cin.fail() || urgencia < 1 || urgencia > 3) {
+                    std::cin.clear(); // Limpiar el estado de error
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorar la entrada incorrecta
+                    std::cout << "Urgencia inválida. Por favor, ingrese un numero del 1 al 3." << std::endl;
+                }
+                else {
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Limpiar el buffer
+                    break; // Salir del bucle si la entrada es válida
+                }
+            }
             Cita::agregarCita(nombrePaciente, nombreMedico, fecha, urgencia);
             break;
         }

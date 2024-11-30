@@ -74,7 +74,7 @@ bool Cita::guardarCitaEnCSV(const Cita& cita) {
         std::cout << "Archivo de citas abierto correctamente.\n";
         // Supongamos que agregas un campo id en la clase Cita
         archivo << cita.urgencia << "," << cita.paciente->getNombre() << "," << cita.medico->getNombre() << "," << cita.fecha << "\n";
-        std::cout << "Datos de la cita escritos: " << cita.paciente->getNombre() << " con " << cita.medico->getNombre() << " en " << cita.fecha << "\n";
+        std::cout << "Datos de la cita escritos: | " << cita.paciente->getNombre() << " | con | " << cita.medico->getNombre() << " en | " << cita.fecha << " | \n\n";
         archivo.close();
         return true;
     }
@@ -140,12 +140,12 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
     crearCitasCSV();
 
     if (!buscarPacienteEnCSV(nombrePaciente)) {
-        std::cout << "El paciente '" << nombrePaciente << "' no existe en el sistema. No se puede agregar la cita." << std::endl;
+        std::cout << "El paciente | " << nombrePaciente << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
         return;
     }
 
     if (!buscarMedicoEnCSV(nombreMedico)) {
-        std::cout << "El médico '" << nombreMedico << "' no existe en el sistema. No se puede agregar la cita." << std::endl;
+        std::cout << "El médico | " << nombreMedico << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
         return;
     }
 
@@ -156,7 +156,7 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
 
     if (guardarCitaEnCSV(*nuevaCita)) {
         citas.emplace_back(std::move(nuevaCita));
-        std::cout << "Cita agregada correctamente con ID: " << nuevoId << "\n";
+        std::cout << "Cita agregada correctamente con ID: " << nuevoId << " \n\n";
     }
     else {
         std::cout << "Error al agregar la cita. Intente nuevamente.\n";

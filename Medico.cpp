@@ -71,7 +71,7 @@ bool Medico::guardarMedicoEnCSV(const Medico& medico) {
     std::ofstream archivo("Medicos.csv", std::ios::app);
     if (archivo.is_open()) {
         archivo << medico.id << "," << medico.nombre << "," << medico.especialidad << "\n";
-        std::cout << "Datos del Medico escritos: " << medico.id << ", " << medico.nombre << ", " << medico.especialidad << "\n";
+        std::cout << "Datos del Medico escritos: | " << medico.id << " | " << medico.nombre << " | " << medico.especialidad << " |\n";
         archivo.close();
         return true;
     }
@@ -164,14 +164,14 @@ void Medico::eliminarMedico(const std::string& nombreBuscado) {
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "Medico '" << nombreBuscado << "' eliminado correctamente." << std::endl;
+            std::cout << "Medico | " << nombreBuscado << " | eliminado correctamente." << std::endl;
         }
         else {
             std::cerr << "Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "Medico '" << nombreBuscado << "' no encontrado." << std::endl;
+        std::cout << "Medico | " << nombreBuscado << " | no encontrado." << std::endl;
     }
 }
 
@@ -211,13 +211,13 @@ void Medico::modificarNombreMedico(const std::string& nombreBuscado, const std::
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "Nombre del medico '" << nombreBuscado << "' modificado a '" << nuevoNombre << "' correctamente." << std::endl;
+            std::cout << "Nombre del medico | " << nombreBuscado << " | modificado a: |" << nuevoNombre << " | correctamente." << std::endl;
         }
         else {
             std::cerr << "Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "Medico '" << nombreBuscado << "' no encontrado." << std::endl;
+        std::cout << "Medico | " << nombreBuscado << " | no encontrado." << std::endl;
     }
 }

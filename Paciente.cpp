@@ -76,7 +76,7 @@ bool Paciente::guardarPacienteEnCSV(const Paciente& paciente) {
     std::ofstream archivo("Pacientes.csv", std::ios::app);
     if (archivo.is_open()) {
         archivo << paciente.id << "," << paciente.nombre << "," << paciente.fechaIngreso << "\n";
-        std::cout << "Datos del paciente escritos: " << paciente.id << ", " << paciente.nombre << ", " << paciente.fechaIngreso << "\n";
+        std::cout << "Datos del paciente escritos: | " << paciente.id << " | " << paciente.nombre << " | " << paciente.fechaIngreso << " | \n\n";
         return true;
     }
     else {
@@ -179,14 +179,14 @@ void Paciente::eliminarPaciente(const std::string& nombreBuscado) {
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "Paciente '" << nombreBuscado << "' eliminado correctamente." << std::endl;
+            std::cout << "Paciente | " << nombreBuscado << " | eliminado correctamente." << std::endl;
         }
         else {
             std::cerr << "Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "Paciente '" << nombreBuscado << "' no encontrado." << std::endl;
+        std::cout << "Paciente | " << nombreBuscado << " | no encontrado." << std::endl;
     }
 }
 
@@ -226,13 +226,13 @@ void Paciente::modificarNombrePaciente(const std::string& nombreBuscado, const s
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "Nombre del paciente '" << nombreBuscado << "' modificado a '" << nuevoNombre << "' correctamente." << std::endl;
+            std::cout << "Nombre del paciente | " << nombreBuscado << " | modificado a: | " << nuevoNombre << " | correctamente." << std::endl;
         }
         else {
             std::cerr << "Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "Paciente '" << nombreBuscado << "' no encontrado." << std::endl;
+        std::cout << "Paciente | " << nombreBuscado << " | no encontrado." << std::endl;
     }
 }
