@@ -7,6 +7,7 @@
 #include <limits>
 #include <sstream>
 #include <stdexcept> // Para std::runtime_error
+#include <filesystem>
 
 std::vector<std::unique_ptr<Paciente>> Paciente::pacientes; // Inicializar el vector de médicos
 
@@ -238,6 +239,12 @@ void Paciente::modificarNombrePaciente(const std::string& nombreBuscado, const s
     }
 }
 
+namespace fs = std::filesystem;
+
+void Paciente::crearBackupCSV() {
+    
+}
+
 void Paciente::interfazPacientes() {
     int opcion;
     while (true) {
@@ -246,7 +253,8 @@ void Paciente::interfazPacientes() {
         std::cout << "2. Buscar paciente por nombre\n";
         std::cout << "3. Eliminar paciente por nombre\n";
         std::cout << "4. Modificar nombre de paciente\n";
-        std::cout << "5. Salir\n";
+        std::cout << "5. Generar BackUp de Pacientes\n";
+        std::cout << "6. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
@@ -288,6 +296,8 @@ void Paciente::interfazPacientes() {
             break;
         }
         case 5:
+            Paciente::crearBackupCSV();
+        case 6:
             return;
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";
