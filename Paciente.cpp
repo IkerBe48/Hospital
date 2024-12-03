@@ -257,12 +257,18 @@ void Paciente::crearBackupCSV() {
         fs::create_directory(carpetaBackup);
         std::cout << "Carpeta 'Backups' creada." << std::endl;
     }
+    else {
+        std::cout << "Carpeta 'Backups' no hace falta crearla porque ya existe." << std::endl;
+    }
 
     // Crear la carpeta "Pacientes" dentro de la carpeta anterior 
     std::string carpetaPacientes = "Backups/Pacientes";
     if (!fs::exists(carpetaPacientes)) {
         fs::create_directory(carpetaPacientes);
         std::cout << "Carpeta 'Pacientes' creada." << std::endl;
+    }
+    else {
+        std::cout << "Carpeta 'Pacientes' no hace falta crearla porque ya existe." << std::endl;
     }
 }
 
