@@ -26,44 +26,36 @@ void Hospital::menu() {
     while (true) {
         std::cout << "------Menu------\n";
         std::cout << "1. Apartado Pacientes\n";
-        std::cout << "2. Buscar paciente por nombre\n";
-        std::cout << "3. Eliminar paciente por nombre\n";
-        std::cout << "4. Modificar nombre de paciente\n";
-        std::cout << "5. Agregar medico\n";
-        std::cout << "6. Buscar medico por nombre\n";
-        std::cout << "7. Eliminar medico por nombre\n";
-        std::cout << "8. Modificar nombre de medico\n";
-        std::cout << "9. Agregar cita\n";
+        std::cout << "2. Apartado Medicos\n";
+        std::cout << "3. Apartado Citas\n";
+        std::cout << "4. Apartado Servicios (PENDIENTE)\n";
+        std::cout << "5. Generar backup (PENDIENTE)\n";
+        
         std::cout << "10. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
         switch (opcion) {
         case 1: {
-            /*std::string nombre, fechaIngreso;
-            std::cin.ignore();
-            std::cout << "Ingrese nombre del paciente: ";
-            std::getline(std::cin, nombre);
-            std::cout << "Ingrese fecha de ingreso del paciente: ";
-            std::getline(std::cin, fechaIngreso);
-            Paciente::agregarPaciente(nombre, fechaIngreso);*/
             Paciente::interfazPacientes();
             break;
         }
         case 2: {
-            std::string nombreBuscado;
+            /*std::string nombreBuscado;
             std::cin.ignore();
             std::cout << "Ingrese el nombre del paciente a buscar: ";
             std::getline(std::cin, nombreBuscado);
-            Paciente::buscarPacientePorNombre(nombreBuscado);
+            Paciente::buscarPacientePorNombre(nombreBuscado);*/
+            Medico::interfazMedicos();
             break;
         }
         case 3: {
-            std::string nombreBuscado;
+            /*std::string nombreBuscado;
             std::cin.ignore();
             std::cout << "Ingrese el nombre del paciente a eliminar: ";
             std::getline(std::cin, nombreBuscado);
-            Paciente::eliminarPaciente(nombreBuscado);
+            Paciente::eliminarPaciente(nombreBuscado);*/
+            Cita::interfazCitas();
             break;
         }
         case 4: {

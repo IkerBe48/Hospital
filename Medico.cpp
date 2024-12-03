@@ -222,3 +222,60 @@ void Medico::modificarNombreMedico(const std::string& nombreBuscado, const std::
         std::cout << "\n Medico | " << nombreBuscado << " | no encontrado." << std::endl;
     }
 }
+
+void Medico::interfazMedicos() {
+    int opcion;
+    while (true) {
+        std::cout << "------Menu------\n";
+        std::cout << "1. Agregar medico\n";
+        std::cout << "2. Buscar medico por nombre\n";
+        std::cout << "3. Eliminar medico por nombre\n";
+        std::cout << "4. Modificar nombre de medico\n";
+        std::cout << "5. Salir\n";
+        std::cout << "\nIntroduce un numero: ";
+        std::cin >> opcion;
+
+        switch (opcion) {
+        case 1: {
+            std::string nombre, especialidad;
+            std::cin.ignore();
+            std::cout << "Ingrese nombre del medico: ";
+            std::getline(std::cin, nombre);
+            std::cout << "Ingrese la especialidad del medico: ";
+            std::getline(std::cin, especialidad);
+            Medico::agregarMedico(nombre, especialidad);
+            break;
+        }
+        case 2: {
+            std::string nombreBuscado;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del medico a buscar: ";
+            std::getline(std::cin, nombreBuscado);
+            Medico::buscarMedicoPorNombre(nombreBuscado);
+            break;
+        }
+        case 3: {
+            std::string nombreBuscado;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del medico a eliminar: ";
+            std::getline(std::cin, nombreBuscado);
+            Medico::eliminarMedico(nombreBuscado);
+            break;
+        }
+        case 4: {
+            std::string nombreBuscado, nuevoNombre;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del medico a modificar: ";
+            std::getline(std::cin, nombreBuscado);
+            std::cout << "Ingrese el nuevo nombre del medico: ";
+            std::getline(std::cin, nuevoNombre);
+            Medico::modificarNombreMedico(nombreBuscado, nuevoNombre);
+            break;
+        }
+        case 5:
+            return;
+        default:
+            std::cout << "\nOpcion invalida. Intente de nuevo.\n";
+        }
+    }
+}

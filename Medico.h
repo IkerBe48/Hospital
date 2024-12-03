@@ -23,6 +23,8 @@ public:
     static void eliminarMedico(const std::string& nombreBuscado);
     static void modificarNombreMedico(const std::string& nombreBuscado, const std::string& nuevoNombre);
 
+    static void interfazMedicos(); //Menu de Medicos
+
 private:
     int id;
     std::string nombre;

@@ -35,6 +35,7 @@ public:
     static void buscarMedicoPorNombre(const std::string& nombre);
     static void eliminarMedico(const std::string& nombre);
     static void modificarNombreMedico(const std::string& nombreBuscado, const std::string& nuevoNombre);
+    static void interfazMedicos(); //Menu de Medicos
 
 private:
     std::string nombre;
@@ -47,6 +48,7 @@ public:
     Cita(const std::string& nombrePaciente, const std::string& nombreMedico, const std::string& fecha, int urgencia);
 
     static void agregarCita(const std::string& nombrePaciente, const std::string& nombreMedico, const std::string& fecha, int urgencia);
+    static void interfazCitas(); //Menu de Citas
 
 private:
     std::string nombrePaciente;
