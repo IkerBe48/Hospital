@@ -21,11 +21,11 @@ void Cita::crearCitasCSV() {
         std::ofstream archivoSalida("Citas.csv");
         if (archivoSalida.is_open()) {
             archivoSalida << "ID,Paciente,Medico,fecha de entrada,urgencia\n";
-            std::cout << "Archivo creado y encabezados escritos.\n";
+            std::cout << "\n Archivo creado y encabezados escritos.\n";
             archivoSalida.close();
         }
         else {
-            std::cout << "No se pudo abrir el archivo para crear.\n";
+            std::cout << "\n No se pudo abrir el archivo para crear.\n";
         }
     }
     else {
@@ -33,15 +33,15 @@ void Cita::crearCitasCSV() {
             std::ofstream archivoSalida("Citas.csv", std::ios::app);
             if (archivoSalida.is_open()) {
                 archivoSalida << "ID,Paciente,Medico,fecha de entrada,urgencia\n";
-                std::cout << "Encabezados escritos en el archivo vacío.\n";
+                std::cout << "\n Encabezados escritos en el archivo vacío.\n";
                 archivoSalida.close();
             }
             else {
-                std::cout << "No se pudo abrir el archivo para agregar encabezados.\n";
+                std::cout << "\n No se pudo abrir el archivo para agregar encabezados.\n";
             }
         }
         else {
-            std::cout << "El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
+            std::cout << "\n El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
         }
     }
 
@@ -71,10 +71,10 @@ int Cita::obtenerMaxIdCitas() {
 bool Cita::guardarCitaEnCSV(const Cita& cita) {
     std::ofstream archivo("Citas.csv", std::ios::app);
     if (archivo.is_open()) {
-        std::cout << "Archivo de citas abierto correctamente.\n";
+        std::cout << "\n Archivo de citas abierto correctamente.\n";
         // Supongamos que agregas un campo id en la clase Cita
         archivo << cita.urgencia << "," << cita.paciente->getNombre() << "," << cita.medico->getNombre() << "," << cita.fecha << "\n";
-        std::cout << "Datos de la cita escritos: | " << cita.paciente->getNombre() << " | con | " << cita.medico->getNombre() << " en | " << cita.fecha << " | \n\n";
+        std::cout << "\n Datos de la cita escritos: | " << cita.paciente->getNombre() << " | con | " << cita.medico->getNombre() << " en | " << cita.fecha << " | \n\n";
         archivo.close();
         return true;
     }
@@ -89,7 +89,7 @@ bool Cita::buscarPacienteEnCSV(const std::string& nombreBuscado) {
     std::string linea;
 
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir el archivo de pacientes." << std::endl;
+        std::cerr << "\nError al abrir el archivo de pacientes." << std::endl;
         return false;
     }
 
@@ -115,7 +115,7 @@ bool Cita::buscarMedicoEnCSV(const std::string& nombreBuscado) {
     std::string linea;
 
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir el archivo de médicos." << std::endl;
+        std::cerr << "\nError al abrir el archivo de médicos." << std::endl;
         return false;
     }
 
@@ -140,12 +140,12 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
     crearCitasCSV();
 
     if (!buscarPacienteEnCSV(nombrePaciente)) {
-        std::cout << "El paciente | " << nombrePaciente << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
+        std::cout << "\nEl paciente | " << nombrePaciente << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
         return;
     }
 
     if (!buscarMedicoEnCSV(nombreMedico)) {
-        std::cout << "El médico | " << nombreMedico << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
+        std::cout << "\nEl médico | " << nombreMedico << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
         return;
     }
 
@@ -156,9 +156,9 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
 
     if (guardarCitaEnCSV(*nuevaCita)) {
         citas.emplace_back(std::move(nuevaCita));
-        std::cout << "Cita agregada correctamente con ID: " << nuevoId << " \n\n";
+        std::cout << "\n\n Cita agregada correctamente con ID: " << nuevoId << " \n\n";
     }
     else {
-        std::cout << "Error al agregar la cita. Intente nuevamente.\n";
+        std::cout << "\nError al agregar la cita. Intente nuevamente.\n";
     }
 }

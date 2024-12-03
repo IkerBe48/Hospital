@@ -29,7 +29,8 @@ void Paciente::crearPacientesCSV() {
     if (!archivo) {
         std::ofstream archivoSalida("Pacientes.csv");
         if (archivoSalida.is_open()) {
-            archivoSalida << "ID,Nombre,Fecha de Ingreso\n";
+            archivoSalida << "ID,Nombre,Fecha de Ingreso\n"; //AÑADIR CAMPO FECHA SALIDA Y QUE AL AGREGAR SEA NULO. 
+            //USANDO ALGO PARECIDO AL DE MODIFICAR NOMBRE PACIENTE, AGREGAR FECHA SALIDA Y QUE NO PUEDA SER MENOR A LA FECHA INGRESO
             std::cout << "Archivo creado y encabezados escritos.\n";
         }
         else {
@@ -41,14 +42,14 @@ void Paciente::crearPacientesCSV() {
             std::ofstream archivoSalida("Pacientes.csv", std::ios::app);
             if (archivoSalida.is_open()) {
                 archivoSalida << "ID,Nombre,Fecha de Ingreso\n";
-                std::cout << "Encabezados escritos en el archivo vacío.\n";
+                std::cout << "\n Encabezados escritos en el archivo vacío.\n";
             }
             else {
-                std::cout << "No se pudo abrir el archivo para agregar encabezados.\n";
+                std::cout << "\n No se pudo abrir el archivo para agregar encabezados.\n";
             }
         }
         else {
-            std::cout << "El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
+            std::cout << "\n El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
         }
     }
 }
@@ -76,11 +77,11 @@ bool Paciente::guardarPacienteEnCSV(const Paciente& paciente) {
     std::ofstream archivo("Pacientes.csv", std::ios::app);
     if (archivo.is_open()) {
         archivo << paciente.id << "," << paciente.nombre << "," << paciente.fechaIngreso << "\n";
-        std::cout << "Datos del paciente escritos: | " << paciente.id << " | " << paciente.nombre << " | " << paciente.fechaIngreso << " | \n\n";
+        std::cout << "\n\n Datos del paciente escritos: | " << paciente.id << " | " << paciente.nombre << " | " << paciente.fechaIngreso << " | \n\n";
         return true;
     }
     else {
-        std::cout << "No se pudo abrir el archivo para escribir.\n";
+        std::cout << "\n No se pudo abrir el archivo para escribir.\n";
         return false;
     }
 }
@@ -91,7 +92,7 @@ void Paciente::buscarPaciente(const std::string& nombreBuscado) {
     bool encontrado = false;
 
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir el archivo." << std::endl;
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
 
@@ -104,12 +105,12 @@ void Paciente::buscarPaciente(const std::string& nombreBuscado) {
 
         if (nombre == nombreBuscado) {
             encontrado = true;
-            std::cout << "Paciente encontrado: " << linea << std::endl;
+            std::cout << "\n Paciente encontrado: " << linea << std::endl;
         }
     }
 
     if (!encontrado) {
-        std::cout << "Paciente no encontrado." << std::endl;
+        std::cout << "\n Paciente no encontrado." << std::endl;
     }
 
     archivo.close();
@@ -119,12 +120,12 @@ void Paciente::buscarPaciente(const std::string& nombreBuscado) {
 void Paciente::agregarPaciente(const std::string& nombre, const std::string& fechaIngreso) {
     // Validar los datos de entrada
     if (nombre.empty()) {
-        std::cout << "Error: El nombre no puede estar vacío.\n";
+        std::cout << "\n Error: El nombre no puede estar vacío.\n";
         return;
     }
 
     if (fechaIngreso.empty()) {
-        std::cout << "Error: La fecha de ingreso no puede estar vacía.\n";
+        std::cout << "\n Error: La fecha de ingreso no puede estar vacía.\n";
         return;
     }
     crearPacientesCSV();
@@ -133,10 +134,10 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
     auto nuevoPaciente = std::make_unique<Paciente>(nuevoId, nombre, fechaIngreso);
     if (guardarPacienteEnCSV(*nuevoPaciente)) {
         pacientes.emplace_back(std::move(nuevoPaciente));
-        std::cout << "Paciente agregado correctamente con ID: " << nuevoId << "\n";
+        std::cout << "\n Paciente agregado correctamente con ID: " << nuevoId << "\n";
     }
     else {
-        std::cout << "Error al agregar el paciente. Intente nuevamente.\n";
+        std::cout << "\n Error al agregar el paciente. Intente nuevamente.\n";
     }
 }
 
@@ -151,7 +152,7 @@ void Paciente::eliminarPaciente(const std::string& nombreBuscado) {
     bool encontrado = false;
 
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir el archivo." << std::endl;
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
 
@@ -179,14 +180,14 @@ void Paciente::eliminarPaciente(const std::string& nombreBuscado) {
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "Paciente | " << nombreBuscado << " | eliminado correctamente." << std::endl;
+            std::cout << "\n\n Paciente | " << nombreBuscado << " | eliminado correctamente." << std::endl;
         }
         else {
-            std::cerr << "Error al abrir el archivo para escribir." << std::endl;
+            std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "Paciente | " << nombreBuscado << " | no encontrado." << std::endl;
+        std::cout << "\n Paciente | " << nombreBuscado << " | no encontrado." << std::endl;
     }
 }
 
@@ -197,7 +198,7 @@ void Paciente::modificarNombrePaciente(const std::string& nombreBuscado, const s
     bool encontrado = false;
 
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir el archivo." << std::endl;
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
 
@@ -226,13 +227,70 @@ void Paciente::modificarNombrePaciente(const std::string& nombreBuscado, const s
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "Nombre del paciente | " << nombreBuscado << " | modificado a: | " << nuevoNombre << " | correctamente." << std::endl;
+            std::cout << "\n\n Nombre del paciente | " << nombreBuscado << " | modificado a: | " << nuevoNombre << " | correctamente." << std::endl;
         }
         else {
-            std::cerr << "Error al abrir el archivo para escribir." << std::endl;
+            std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "Paciente | " << nombreBuscado << " | no encontrado." << std::endl;
+        std::cout << "\n Paciente | " << nombreBuscado << " | no encontrado." << std::endl;
+    }
+}
+
+void Paciente::interfazPacientes() {
+    int opcion;
+    while (true) {
+        std::cout << "------Menu------\n";
+        std::cout << "1. Agregar paciente\n";
+        std::cout << "2. Buscar paciente por nombre\n";
+        std::cout << "3. Eliminar paciente por nombre\n";
+        std::cout << "4. Modificar nombre de paciente\n";
+        std::cout << "5. Salir\n";
+        std::cout << "\nIntroduce un numero: ";
+        std::cin >> opcion;
+
+        switch (opcion) {
+        case 1: {
+            std::string nombre, fechaIngreso;
+            std::cin.ignore();
+            std::cout << "Ingrese nombre del paciente: ";
+            std::getline(std::cin, nombre);
+            std::cout << "Ingrese fecha de ingreso del paciente: ";
+            std::getline(std::cin, fechaIngreso);
+            Paciente::agregarPaciente(nombre, fechaIngreso);
+            break;
+        }
+        case 2: {
+            std::string nombreBuscado;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del paciente a buscar: ";
+            std::getline(std::cin, nombreBuscado);
+            Paciente::buscarPacientePorNombre(nombreBuscado);
+            break;
+        }
+        case 3: {
+            std::string nombreBuscado;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del paciente a eliminar: ";
+            std::getline(std::cin, nombreBuscado);
+            Paciente::eliminarPaciente(nombreBuscado);
+            break;
+        }
+        case 4: {
+            std::string nombreBuscado, nuevoNombre;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del paciente a modificar: ";
+            std::getline(std::cin, nombreBuscado);
+            std::cout << "Ingrese el nuevo nombre del paciente: ";
+            std::getline(std::cin, nuevoNombre);
+            Paciente::modificarNombrePaciente(nombreBuscado, nuevoNombre);
+            break;
+        }
+        case 5:
+            return;
+        default:
+            std::cout << "\nOpcion invalida. Intente de nuevo.\n";
+        }
     }
 }

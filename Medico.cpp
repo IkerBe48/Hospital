@@ -19,12 +19,13 @@ void Medico::crearMedicosCSV() {
     if (!archivo) {
         std::ofstream archivoSalida("Medicos.csv");
         if (archivoSalida.is_open()) {
-            archivoSalida << "ID,Nombre,Especialidad\n";
-            std::cout << "Archivo creado y encabezados escritos.\n";
+            archivoSalida << "ID,Nombre,Especialidad\n"; // AGREGAR CAMPO DISPONIBLE BOOL Y QUE SI EL MEDICO TIENE 
+            // DISPONIBLE FALSE, MUESTRE ERROR QUE NO SE PUEDE INTRODUCIR CITA CON DICHO MEDICO
+            std::cout << "\n Archivo creado y encabezados escritos.\n";
             archivoSalida.close();
         }
         else {
-            std::cout << "No se pudo abrir el archivo para crear.\n";
+            std::cout << "\n No se pudo abrir el archivo para crear.\n";
         }
     }
     else {
@@ -32,15 +33,15 @@ void Medico::crearMedicosCSV() {
             std::ofstream archivoSalida("Medicos.csv", std::ios::app);
             if (archivoSalida.is_open()) {
                 archivoSalida << "ID,Nombre,Especialidad\n";
-                std::cout << "Encabezados escritos en el archivo vacío.\n";
+                std::cout << "\n Encabezados escritos en el archivo vacío.\n";
                 archivoSalida.close();
             }
             else {
-                std::cout << "No se pudo abrir el archivo para agregar encabezados.\n";
+                std::cout << "\n No se pudo abrir el archivo para agregar encabezados.\n";
             }
         }
         else {
-            std::cout << "El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
+            std::cout << "\n El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
         }
     }
 
@@ -71,12 +72,12 @@ bool Medico::guardarMedicoEnCSV(const Medico& medico) {
     std::ofstream archivo("Medicos.csv", std::ios::app);
     if (archivo.is_open()) {
         archivo << medico.id << "," << medico.nombre << "," << medico.especialidad << "\n";
-        std::cout << "Datos del Medico escritos: | " << medico.id << " | " << medico.nombre << " | " << medico.especialidad << " |\n";
+        std::cout << "\n\n Datos del Medico escritos: | " << medico.id << " | " << medico.nombre << " | " << medico.especialidad << " |\n";
         archivo.close();
         return true;
     }
     else {
-        std::cout << "No se pudo abrir el archivo para escribir.\n";
+        std::cout << "\n No se pudo abrir el archivo para escribir.\n";
         return false;
     }
 }
@@ -87,7 +88,7 @@ void Medico::buscarMedico(const std::string& nombreBuscado) {
     bool encontrado = false;
 
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir el archivo." << std::endl;
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
 
@@ -100,12 +101,12 @@ void Medico::buscarMedico(const std::string& nombreBuscado) {
 
         if (nombre == nombreBuscado) {
             encontrado = true;
-            std::cout << "Medico encontrado: " << linea << std::endl;
+            std::cout << "\n\n Medico encontrado: " << linea << std::endl;
         }
     }
 
     if (!encontrado) {
-        std::cout << "Medico no encontrado." << std::endl;
+        std::cout << "\n Medico no encontrado." << std::endl;
     }
 
     archivo.close();
@@ -118,10 +119,10 @@ void Medico::agregarMedico(const std::string& nombre, const std::string& especia
     auto nuevoMedico = std::make_unique<Medico>(nuevoId, nombre, especialidad);
     if (guardarMedicoEnCSV(*nuevoMedico)) {
         medicos.emplace_back(std::move(nuevoMedico));
-        std::cout << "Medico agregado correctamente con ID: " << nuevoId << "\n";
+        std::cout << "\n\n Medico agregado correctamente con ID: " << nuevoId << "\n";
     }
     else {
-        std::cout << "Error al agregar el medico. Intente nuevamente.\n";
+        std::cout << "\n Error al agregar el medico. Intente nuevamente.\n";
     }
 }
 
@@ -136,7 +137,7 @@ void Medico::eliminarMedico(const std::string& nombreBuscado) {
     bool encontrado = false;
 
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir el archivo." << std::endl;
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
 
@@ -164,14 +165,14 @@ void Medico::eliminarMedico(const std::string& nombreBuscado) {
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "Medico | " << nombreBuscado << " | eliminado correctamente." << std::endl;
+            std::cout << "\n\n Medico | " << nombreBuscado << " | eliminado correctamente." << std::endl;
         }
         else {
-            std::cerr << "Error al abrir el archivo para escribir." << std::endl;
+            std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "Medico | " << nombreBuscado << " | no encontrado." << std::endl;
+        std::cout << "\n Medico | " << nombreBuscado << " | no encontrado." << std::endl;
     }
 }
 
@@ -182,7 +183,7 @@ void Medico::modificarNombreMedico(const std::string& nombreBuscado, const std::
     bool encontrado = false;
 
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir el archivo." << std::endl;
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
 
@@ -211,13 +212,13 @@ void Medico::modificarNombreMedico(const std::string& nombreBuscado, const std::
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "Nombre del medico | " << nombreBuscado << " | modificado a: |" << nuevoNombre << " | correctamente." << std::endl;
+            std::cout << "\n\n Nombre del medico | " << nombreBuscado << " | modificado a: |" << nuevoNombre << " | correctamente." << std::endl;
         }
         else {
-            std::cerr << "Error al abrir el archivo para escribir." << std::endl;
+            std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "Medico | " << nombreBuscado << " | no encontrado." << std::endl;
+        std::cout << "\n Medico | " << nombreBuscado << " | no encontrado." << std::endl;
     }
 }
