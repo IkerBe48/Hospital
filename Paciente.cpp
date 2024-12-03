@@ -279,8 +279,18 @@ void Paciente::crearBackupCSV() {
     
     std::string nombreBackup = carpetaPacientes + "/BCK_Pacientes_" + std::string(buffer) + ".csv";
 
-    
+    // Aqui se lee el contenido del csv original y se escribe en el archivo de backup
+    std::ifstream archivoOriginal(nombreArchivo);
+    std::ofstream archivoBackup(nombreBackup);
+
+    if (!archivoBackup) {
+        std::cerr << "No se pudo crear el archivo de backup." << std::endl;
+        return;
+    }
+
 }
+
+
 
 void Paciente::interfazPacientes() {
     int opcion;
