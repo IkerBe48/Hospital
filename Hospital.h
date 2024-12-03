@@ -16,6 +16,7 @@ public:
     static void buscarPacientePorNombre(const std::string& nombre);
     static void eliminarPaciente(const std::string& nombre);
     static void modificarNombrePaciente(const std::string& nombreBuscado, const std::string& nuevoNombre);
+    static void interfazPacientes(); //Menu de Pacientes
 
 private:
     std::string nombre;

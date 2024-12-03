@@ -25,7 +25,7 @@ void Hospital::menu() {
     int opcion;
     while (true) {
         std::cout << "------Menu------\n";
-        std::cout << "1. Agregar paciente\n";
+        std::cout << "1. Apartado Pacientes\n";
         std::cout << "2. Buscar paciente por nombre\n";
         std::cout << "3. Eliminar paciente por nombre\n";
         std::cout << "4. Modificar nombre de paciente\n";
@@ -40,13 +40,14 @@ void Hospital::menu() {
 
         switch (opcion) {
         case 1: {
-            std::string nombre, fechaIngreso;
+            /*std::string nombre, fechaIngreso;
             std::cin.ignore();
             std::cout << "Ingrese nombre del paciente: ";
             std::getline(std::cin, nombre);
             std::cout << "Ingrese fecha de ingreso del paciente: ";
             std::getline(std::cin, fechaIngreso);
-            Paciente::agregarPaciente(nombre, fechaIngreso);
+            Paciente::agregarPaciente(nombre, fechaIngreso);*/
+            Paciente::interfazPacientes();
             break;
         }
         case 2: {
