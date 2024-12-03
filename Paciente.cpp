@@ -243,11 +243,11 @@ namespace fs = std::filesystem;
 
 void Paciente::crearBackupCSV() {
 
-    std::ifstream archivo("Pacientes.csv");
+    std::string nombreArchivo = "Pacientes.csv";
 
-    //Se verifica si existe el csv
-    if (!archivo) {
-        std::cout << "No se pudo abrir el archivo porque no existe.\n" << std::endl;
+    // Verificar si el archivo CSV existe
+    if (!fs::exists(nombreArchivo)) {
+        std::cerr << "El archivo " << nombreArchivo << " no existe." << std::endl;
         return;
     }
 
@@ -270,6 +270,16 @@ void Paciente::crearBackupCSV() {
     else {
         std::cout << "Carpeta 'Pacientes' no hace falta crearla porque ya existe." << std::endl;
     }
+    // Se obtiene la fecha y hora actual para el nombre del backup
+    std::time_t tiempoActual = std::time(nullptr);
+    std::tm* tm = std::localtime(&tiempoActual);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", tm);
+
+    
+    std::string nombreBackup = carpetaPacientes + "/BCK_Pacientes_" + std::string(buffer) + ".csv";
+
+    
 }
 
 void Paciente::interfazPacientes() {
