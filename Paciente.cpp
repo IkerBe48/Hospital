@@ -241,7 +241,7 @@ void Paciente::modificarNombrePaciente(const std::string& nombreBuscado, const s
 
 namespace fs = std::filesystem;
 
-void Paciente::crearBackupCSV() {
+void Paciente::crearBackupPacientesCSV() {
 
     std::string nombreArchivo = "Pacientes.csv";
 
@@ -287,9 +287,21 @@ void Paciente::crearBackupCSV() {
         std::cerr << "No se pudo crear el archivo de backup." << std::endl;
         return;
     }
+    std::string linea;
+    while (std::getline(archivoOriginal, linea)) {
+        archivoBackup << linea << std::endl;
+    }
 
+    std::cout << "Backup creado: " << nombreBackup << std::endl;
+
+    //Se cierran los archivos
+    archivoOriginal.close();
+    archivoBackup.close();
 }
 
+void Paciente::exportarPacientes() {
+
+}
 
 
 void Paciente::interfazPacientes() {
@@ -301,7 +313,8 @@ void Paciente::interfazPacientes() {
         std::cout << "3. Eliminar paciente por nombre\n";
         std::cout << "4. Modificar nombre de paciente\n";
         std::cout << "5. Generar BackUp de Pacientes\n";
-        std::cout << "6. Salir\n";
+        std::cout << "6. Generar Fichero de Pacientes\n";
+        std::cout << "7. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
@@ -343,8 +356,11 @@ void Paciente::interfazPacientes() {
             break;
         }
         case 5:
-            Paciente::crearBackupCSV();
+            Paciente::crearBackupPacientesCSV();
         case 6:
+            Paciente::exportarPacientes();
+
+        case 7:
             return;
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";

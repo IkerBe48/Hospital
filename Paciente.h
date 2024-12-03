@@ -29,7 +29,8 @@ public:
     static void modificarNombrePaciente(const std::string& nombreBuscado, const std::string& nuevoNombre);
 
     static void interfazPacientes(); //Menu de Pacientes
-    static void crearBackupCSV();
+    static void crearBackupPacientesCSV();
+    static void exportarPacientes();
 
 private:
     int id;
