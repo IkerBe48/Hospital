@@ -242,7 +242,28 @@ void Paciente::modificarNombrePaciente(const std::string& nombreBuscado, const s
 namespace fs = std::filesystem;
 
 void Paciente::crearBackupCSV() {
-    
+
+    std::ifstream archivo("Pacientes.csv");
+
+    //Se verifica si existe el csv
+    if (!archivo) {
+        std::cout << "No se pudo abrir el archivo porque no existe.\n" << std::endl;
+        return;
+    }
+
+    // Crear la carpeta "Backups" 
+    std::string carpetaBackup = "Backups";
+    if (!fs::exists(carpetaBackup)) {
+        fs::create_directory(carpetaBackup);
+        std::cout << "Carpeta 'Backups' creada." << std::endl;
+    }
+
+    // Crear la carpeta "Pacientes" dentro de la carpeta anterior 
+    std::string carpetaPacientes = "Backups/Pacientes";
+    if (!fs::exists(carpetaPacientes)) {
+        fs::create_directory(carpetaPacientes);
+        std::cout << "Carpeta 'Pacientes' creada." << std::endl;
+    }
 }
 
 void Paciente::interfazPacientes() {
