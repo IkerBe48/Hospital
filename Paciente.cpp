@@ -301,6 +301,17 @@ void Paciente::crearBackupPacientesCSV() {
 
 void Paciente::exportarPacientes() {
 
+    std::string nombreCSV = "Pacientes.csv";
+    //Nombre del report que se quiere generar
+    std::string nombreTXT = "Pacientes_Report.txt";
+
+    // Verificar si el CSV de Pacientes existe
+    if (!fs::exists(nombreCSV)) {
+        std::cerr << "El archivo " << nombreCSV << " no existe." << std::endl;
+        return;
+    }
+
+
 }
 
 
