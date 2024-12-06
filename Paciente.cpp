@@ -135,6 +135,13 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
         return;
     }
 
+    // Validar el formato de la fecha (DD-MM-YYYY)
+    std::regex fechaRegex(R"(^\d{2}-\d{2}-\d{4}$)");
+    if (!std::regex_match(fechaIngreso, fechaRegex)) {
+        std::cout << "\n Error: La fecha de ingreso debe estar en el formato DD-MM-YYYY.\n";
+        return;
+    }
+
     crearPacientesCSV();
 
     int nuevoId = obtenerMaxId() + 1;
