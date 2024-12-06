@@ -8,6 +8,7 @@
 #include <sstream>
 #include <stdexcept> // Para std::runtime_error
 #include <filesystem>
+#include <regex>
 
 std::vector<std::unique_ptr<Paciente>> Paciente::pacientes; // Inicializar el vector de médicos
 
@@ -129,6 +130,11 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
         std::cout << "\n Error: La fecha de ingreso no puede estar vacía.\n";
         return;
     }
+    if (fechaIngreso.empty()) {
+        std::cout << "\n Error: La fecha de ingreso no puede estar vacía.\n";
+        return;
+    }
+
     crearPacientesCSV();
 
     int nuevoId = obtenerMaxId() + 1;
@@ -310,10 +316,32 @@ void Paciente::exportarPacientes() {
         std::cerr << "El archivo " << nombreCSV << " no existe." << std::endl;
         return;
     }
+    // Abrir el archivo CSV para lectura
+    std::ifstream archivoCSV(nombreCSV);
+    // Abrir el archivo TXT para escritura
+    std::ofstream archivoTXT(nombreTXT);
 
+    if (!archivoTXT) {
+        std::cerr << "No se pudo crear el archivo de texto." << std::endl;
+        return;
+    }
 
+    // Escribir encabezado
+    archivoTXT << "Reporte de Pacientes\n";
+    archivoTXT << "=====================\n";
+    archivoTXT << "ID\tNombre\tFecha de Ingreso\n"; // Suponiendo que esas son las columnas
+
+    std::string linea;
+    while (std::getline(archivoCSV, linea)) {
+        archivoTXT << linea << std::endl; // Escribir cada línea del CSV en el archivo TXT
+    }
+
+    std::cout << "Contenido exportado a: " << nombreTXT << std::endl;
+
+    // Cerrar los archivos
+    archivoCSV.close();
+    archivoTXT.close();
 }
-
 
 void Paciente::interfazPacientes() {
     int opcion;
@@ -325,7 +353,8 @@ void Paciente::interfazPacientes() {
         std::cout << "4. Modificar nombre de paciente\n";
         std::cout << "5. Generar BackUp de Pacientes\n";
         std::cout << "6. Generar Fichero de Pacientes\n";
-        std::cout << "7. Salir\n";
+        std::cout << "7. Buscar pacientes entre dos fechas (PENDIENTE)\n";
+        std::cout << "8. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
@@ -370,8 +399,11 @@ void Paciente::interfazPacientes() {
             Paciente::crearBackupPacientesCSV();
         case 6:
             Paciente::exportarPacientes();
-
-        case 7:
+        case 7: {
+            
+            break;
+        }
+        case 8:
             return;
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";

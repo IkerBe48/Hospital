@@ -31,7 +31,7 @@ public:
     static void interfazPacientes(); //Menu de Pacientes
     static void crearBackupPacientesCSV();
     static void exportarPacientes();
-
+    
 private:
     int id;
     std::string nombre;
