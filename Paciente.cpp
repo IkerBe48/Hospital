@@ -118,7 +118,7 @@ bool Paciente::esFechaValida(const std::string& fecha) {
     char separador1, separador2;
 
     std::istringstream fechaStream(fecha);
-    fechaStream >> dia >> separador1 >> mes >> separador2 >> anio;
+    fechaStream >> anio >> separador1 >> mes >> separador2 >> dia;
 
     // Verificar que se hayan leído correctamente los separadores
     if (separador1 != '-' || separador2 != '-') {
@@ -165,9 +165,9 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
     }
 
     // Validar el formato de la fecha (DD-MM-YYYY)
-    std::regex fechaRegex(R"(^\d{2}-\d{2}-\d{4}$)");
+    std::regex fechaRegex(R"(^\d{4}-\d{2}-\d{2}$)");
     if (!std::regex_match(fechaIngreso, fechaRegex)) {
-        std::cout << "\n Error: La fecha de ingreso debe estar en el formato DD-MM-YYYY.\n";
+        std::cout << "\n Error: La fecha de ingreso debe estar en el formato YYYY-MM-DD.\n";
         return;
     }
     // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
@@ -412,14 +412,14 @@ void Paciente::buscarPacientesPorFechaIngreso(const std::string& fechaInicio, co
         }
 
         // Validar el formato de la fecha (DD-MM-YYYY)
-        std::regex fechaRegex(R"(^\d{2}-\d{2}-\d{4}$)");
+        std::regex fechaRegex(R"(^\d{4}-\d{2}-\d{2}$)");
         if (!std::regex_match(fechaInicio, fechaRegex)) {
-            std::cout << "\n Error: La fecha de inicio debe estar en el formato DD-MM-YYYY.\n";
+            std::cout << "\n Error: La fecha de inicio debe estar en el formato YYYY-MM-DD.\n";
             return;
         }
 
         if (!std::regex_match(fechaFin, fechaRegex)) {
-            std::cout << "\n Error: La fecha fin debe estar en el formato DD-MM-YYYY.\n";
+            std::cout << "\n Error: La fecha fin debe estar en el formato YYYY-MM-DD.\n";
             return;
         }
         // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
