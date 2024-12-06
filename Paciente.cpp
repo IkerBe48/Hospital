@@ -393,6 +393,59 @@ void Paciente::buscarPacientesPorFechaIngreso(const std::string& fechaInicio, co
         std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
+    while (std::getline(archivo, linea)) {
+        std::istringstream stream(linea);
+        std::string id, nombre, fechaIngreso;
+
+        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
+        std::getline(stream, nombre, ','); // Asumiendo que el nombre es la segunda columna
+        std::getline(stream, fechaIngreso, ','); // Asumiendo que la fecha de ingreso es la tercera columna
+
+        if (fechaInicio.empty()) {
+            std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
+            return;
+        }
+
+        if (fechaFin.empty()) {
+            std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
+            return;
+        }
+
+        // Validar el formato de la fecha (DD-MM-YYYY)
+        std::regex fechaRegex(R"(^\d{2}-\d{2}-\d{4}$)");
+        if (!std::regex_match(fechaInicio, fechaRegex)) {
+            std::cout << "\n Error: La fecha de inicio debe estar en el formato DD-MM-YYYY.\n";
+            return;
+        }
+
+        if (!std::regex_match(fechaFin, fechaRegex)) {
+            std::cout << "\n Error: La fecha fin debe estar en el formato DD-MM-YYYY.\n";
+            return;
+        }
+        // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
+        if (!esFechaValida(fechaInicio)) {
+            std::cout << "\n Error: La fecha de inicio no es válida.\n";
+            return;
+        }
+
+        // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
+        if (!esFechaValida(fechaFin)) {
+            std::cout << "\n Error: La fecha fin no es válida.\n";
+            return;
+        }
+
+        // Comparar la fecha de ingreso con el rango
+        if (fechaIngreso >= fechaInicio && fechaIngreso <= fechaFin) {
+            encontrado = true;
+            std::cout << " Paciente encontrado: " << linea << std::endl;
+        }
+    }
+
+    if (!encontrado) {
+        std::cout << "\n No se encontraron pacientes en el rango de fechas." << std::endl;
+    }
+
+    archivo.close();
 }
 
 void Paciente::interfazPacientes() {
@@ -405,7 +458,7 @@ void Paciente::interfazPacientes() {
         std::cout << "4. Modificar nombre de paciente\n";
         std::cout << "5. Generar BackUp de Pacientes\n";
         std::cout << "6. Generar Fichero de Pacientes\n";
-        std::cout << "7. Buscar pacientes entre dos fechas (PENDIENTE)\n";
+        std::cout << "7. Buscar pacientes entre dos fechas\n";
         std::cout << "8. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
