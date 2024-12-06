@@ -16,15 +16,6 @@ Paciente::Paciente(int id, const std::string& nombre, const std::string& fechaIn
     : id(id), nombre(nombre), fechaIngreso(fechaIngreso) {
 }
 
-/*void Paciente::agregarHistorial(std::string info) {
-    historialClinico += info + "\n";
-}
-
-void Paciente::mostrarInfo() const {
-    std::cout << "Nombre: " << nombre << ", ID: " << id << ", Fecha de Ingreso: " << fechaIngreso << "\n";
-    std::cout << "Historial Clínico: " << historialClinico << "\n";
-}*/
-
 void Paciente::crearPacientesCSV() {
     std::ifstream archivo("Pacientes.csv");
 
@@ -118,6 +109,44 @@ void Paciente::buscarPaciente(const std::string& nombreBuscado) {
     archivo.close();
 }
 
+bool Paciente::esAnioBisiesto(int anio) {
+    return (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
+}
+
+bool Paciente::esFechaValida(const std::string& fecha) {
+    int dia, mes, anio;
+    char separador1, separador2;
+
+    std::istringstream fechaStream(fecha);
+    fechaStream >> dia >> separador1 >> mes >> separador2 >> anio;
+
+    // Verificar que se hayan leído correctamente los separadores
+    if (separador1 != '-' || separador2 != '-') {
+        return false;
+    }
+
+    // Validar el rango de mes
+    if (mes < 1 || mes > 12) {
+        return false;
+    }
+
+    // Validar el rango de días según el mes
+    switch (mes) {
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 días
+        return (dia >= 1 && dia <= 31);
+    case 4: case 6: case 9: case 11: // Meses con 30 días
+        return (dia >= 1 && dia <= 30);
+    case 2: // Febrero
+        if (esAnioBisiesto(anio)) {
+            return (dia >= 1 && dia <= 29); // 29 días en año bisiesto
+        }
+        else {
+            return (dia >= 1 && dia <= 28); // 28 días en año no bisiesto
+        }
+    default:
+        return false; // No debería llegar aquí
+    }
+}
 
 void Paciente::agregarPaciente(const std::string& nombre, const std::string& fechaIngreso) {
     // Validar los datos de entrada
@@ -139,6 +168,11 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
     std::regex fechaRegex(R"(^\d{2}-\d{2}-\d{4}$)");
     if (!std::regex_match(fechaIngreso, fechaRegex)) {
         std::cout << "\n Error: La fecha de ingreso debe estar en el formato DD-MM-YYYY.\n";
+        return;
+    }
+    // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
+    if (!esFechaValida(fechaIngreso)) {
+        std::cout << "\n Error: La fecha de ingreso no es válida.\n";
         return;
     }
 
@@ -350,6 +384,17 @@ void Paciente::exportarPacientes() {
     archivoTXT.close();
 }
 
+void Paciente::buscarPacientesPorFechaIngreso(const std::string& fechaInicio, const std::string& fechaFin) {
+    std::ifstream archivo("Pacientes.csv");
+    std::string linea;
+    bool encontrado = false;
+
+    if (!archivo.is_open()) {
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
+        return;
+    }
+}
+
 void Paciente::interfazPacientes() {
     int opcion;
     while (true) {
@@ -407,7 +452,13 @@ void Paciente::interfazPacientes() {
         case 6:
             Paciente::exportarPacientes();
         case 7: {
-            
+            std::string fechaInicio, fechaFin;
+            std::cin.ignore();
+            std::cout << "Ingrese la fecha inicio ";
+            std::getline(std::cin, fechaInicio);
+            std::cout << "Ingrese la fecha fin ";
+            std::getline(std::cin, fechaFin);
+            Paciente::buscarPacientesPorFechaIngreso(fechaInicio, fechaFin);
             break;
         }
         case 8:

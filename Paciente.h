@@ -31,6 +31,9 @@ public:
     static void interfazPacientes(); //Menu de Pacientes
     static void crearBackupPacientesCSV();
     static void exportarPacientes();
+    static bool esAnioBisiesto(int anio);
+    static bool esFechaValida(const std::string& fecha);
+    static void buscarPacientesPorFechaIngreso(const std::string& fechaInicio, const std::string& fechaFin);
     
 private:
     int id;
