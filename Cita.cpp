@@ -138,6 +138,45 @@ bool Cita::buscarMedicoEnCSV(const std::string& nombreBuscado) {
     return false;
 }
 
+bool Cita::esAnioBisiesto(int anio) {
+    return (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
+}
+
+bool Cita::esFechaValida(const std::string& fecha) {
+    int dia, mes, anio;
+    char separador1, separador2;
+
+    std::istringstream fechaStream(fecha);
+    fechaStream >> anio >> separador1 >> mes >> separador2 >> dia;
+
+    // Verificar que se hayan leído correctamente los separadores
+    if (separador1 != '-' || separador2 != '-') {
+        return false;
+    }
+
+    // Validar el rango de mes
+    if (mes < 1 || mes > 12) {
+        return false;
+    }
+
+    // Validar el rango de días según el mes
+    switch (mes) {
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 días
+        return (dia >= 1 && dia <= 31);
+    case 4: case 6: case 9: case 11: // Meses con 30 días
+        return (dia >= 1 && dia <= 30);
+    case 2: // Febrero
+        if (esAnioBisiesto(anio)) {
+            return (dia >= 1 && dia <= 29); // 29 días en año bisiesto
+        }
+        else {
+            return (dia >= 1 && dia <= 28); // 28 días en año no bisiesto
+        }
+    default:
+        return false; // No debería llegar aquí
+    }
+}
+
 void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nombreMedico, const std::string& fecha, int urgencia) {
     crearCitasCSV();
 
@@ -148,6 +187,22 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
 
     if (!buscarMedicoEnCSV(nombreMedico)) {
         std::cout << "\nEl médico | " << nombreMedico << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
+        return;
+    }
+    if (fecha.empty()) {
+        std::cout << "\n Error: La fecha de la cita no puede estar vacía.\n";
+        return;
+    }
+
+    // Validar el formato de la fecha (DD-MM-YYYY)
+    std::regex fechaRegex(R"(^\d{4}-\d{2}-\d{2}$)");
+    if (!std::regex_match(fecha, fechaRegex)) {
+        std::cout << "\n Error: La fecha de la cita debe estar en el formato YYYY-MM-DD.\n";
+        return;
+    }
+    // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
+    if (!esFechaValida(fecha)) {
+        std::cout << "\n Error: La fecha de la cita no es válida.\n";
         return;
     }
 

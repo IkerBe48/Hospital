@@ -25,6 +25,8 @@ public:
     static bool buscarMedicoEnCSV(const std::string& nombreBuscado);
     static void agregarCita(const std::string& nombrePaciente, const std::string& nombreMedico, const std::string& fecha, int urgencia);
     static void crearBackupCitasCSV();
+static bool esAnioBisiesto(int anio);
+    static bool esFechaValida(const std::string& fecha);
     static void exportarCitas();
     static void interfazCitas(); //Menu de Citas
 
