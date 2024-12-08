@@ -24,6 +24,8 @@ public:
     static void modificarNombreMedico(const std::string& nombreBuscado, const std::string& nuevoNombre);
     static void crearBackupMedicosCSV();
     static void exportarMedicos();
+    
+    static void buscarMedicoPorEspecialidad(const std::string& nombreBuscado);
     static void interfazMedicos(); //Menu de Medicos
 
 private:
