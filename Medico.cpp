@@ -331,8 +331,8 @@ void Medico::interfazMedicos() {
         std::cout << "2. Buscar medico por nombre\n";
         std::cout << "3. Eliminar medico por nombre\n";
         std::cout << "4. Modificar nombre de medico\n";
-        std::cout << "5. Generar BackUp de Pacientes\n";
-        std::cout << "6. Generar Fichero de Pacientes\n";
+        std::cout << "5. Generar BackUp de Medicos\n";
+        std::cout << "6. Generar Fichero de Medicos\n";
         std::cout << "7. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;

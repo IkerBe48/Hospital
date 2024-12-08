@@ -7,6 +7,8 @@
 #include <string>  // Para usar std::string y getline
 #include <limits>  // Para usar std::numeric_limits
 #include <sstream> // Para usar std::istringstream
+#include <filesystem>
+#include <regex>
 
 std::vector<std::unique_ptr<Cita>> Cita::citas;
 
@@ -162,6 +164,103 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
         std::cout << "\nError al agregar la cita. Intente nuevamente.\n";
     }
 }
+namespace fs = std::filesystem;
+
+void Cita::crearBackupCitasCSV() {
+
+    std::string nombreArchivo = "Citas.csv";
+
+    // Verificar si el archivo CSV existe
+    if (!fs::exists(nombreArchivo)) {
+        std::cerr << "El archivo " << nombreArchivo << " no existe." << std::endl;
+        return;
+    }
+
+    // Crear la carpeta "Backups" 
+    std::string carpetaBackup = "Backups";
+    if (!fs::exists(carpetaBackup)) {
+        fs::create_directory(carpetaBackup);
+        std::cout << "Carpeta 'Backups' creada." << std::endl;
+    }
+    else {
+        std::cout << "Carpeta 'Backups' no hace falta crearla porque ya existe." << std::endl;
+    }
+
+    // Crear la carpeta "Pacientes" dentro de la carpeta anterior 
+    std::string carpetaPacientes = "Backups/Citas";
+    if (!fs::exists(carpetaPacientes)) {
+        fs::create_directory(carpetaPacientes);
+        std::cout << "Carpeta 'Citas' creada." << std::endl;
+    }
+    else {
+        std::cout << "Carpeta 'Citas' no hace falta crearla porque ya existe." << std::endl;
+    }
+    // Se obtiene la fecha y hora actual para el nombre del backup
+    std::time_t tiempoActual = std::time(nullptr);
+    std::tm* tm = std::localtime(&tiempoActual);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", tm);
+
+
+    std::string nombreBackup = carpetaPacientes + "/BCK_Citas_" + std::string(buffer) + ".csv";
+
+    // Aqui se lee el contenido del csv original y se escribe en el archivo de backup
+    std::ifstream archivoOriginal(nombreArchivo);
+    std::ofstream archivoBackup(nombreBackup);
+
+    if (!archivoBackup) {
+        std::cerr << "No se pudo crear el archivo de backup." << std::endl;
+        return;
+    }
+    std::string linea;
+    while (std::getline(archivoOriginal, linea)) {
+        archivoBackup << linea << std::endl;
+    }
+
+    std::cout << "Backup creado: " << nombreBackup << std::endl;
+
+    //Se cierran los archivos
+    archivoOriginal.close();
+    archivoBackup.close();
+}
+
+void Cita::exportarCitas() {
+
+    std::string nombreCSV = "Citas.csv";
+    //Nombre del report que se quiere generar
+    std::string nombreTXT = "Citas_Report.txt";
+
+    // Verificar si el CSV de Pacientes existe
+    if (!fs::exists(nombreCSV)) {
+        std::cerr << "El archivo " << nombreCSV << " no existe." << std::endl;
+        return;
+    }
+    // Abrir el archivo CSV para lectura
+    std::ifstream archivoCSV(nombreCSV);
+    // Abrir el archivo TXT para escritura
+    std::ofstream archivoTXT(nombreTXT);
+
+    if (!archivoTXT) {
+        std::cerr << "No se pudo crear el archivo de texto." << std::endl;
+        return;
+    }
+
+    // Escribir encabezado
+    archivoTXT << "Reporte de Citas\n";
+    archivoTXT << "=====================\n";
+    archivoTXT << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; // Suponiendo que esas son las columnas
+
+    std::string linea;
+    while (std::getline(archivoCSV, linea)) {
+        archivoTXT << linea << std::endl; // Escribir cada línea del CSV en el archivo TXT
+    }
+
+    std::cout << "Contenido exportado a: " << nombreTXT << std::endl;
+
+    // Cerrar los archivos
+    archivoCSV.close();
+    archivoTXT.close();
+}
 
 void Cita::interfazCitas() {
     int opcion;
@@ -171,6 +270,8 @@ void Cita::interfazCitas() {
         std::cout << "2. Buscar Cita por nombre (PENDIENTE)\n";
         std::cout << "3. Eliminar Cita por nombre (PENDIENTE)\n";
         std::cout << "4. Modificar Cita (PENDIENTE)\n";
+        std::cout << "5. Generar BackUp de Citas\n";
+        std::cout << "6. Generar Fichero de Citas\n";
         std::cout << "5. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
@@ -203,8 +304,12 @@ void Cita::interfazCitas() {
             }
             Cita::agregarCita(nombrePaciente, nombreMedico, fecha, urgencia);
             break;
-        }
+        } 
         case 5:
+            Cita::crearBackupCitasCSV();
+        case 6:
+            Cita::exportarCitas();
+        case 7:
             return;
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";
