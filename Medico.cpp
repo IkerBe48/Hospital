@@ -6,6 +6,7 @@
 #include <string>
 #include <limits>
 #include <sstream>
+#include <filesystem>
 
 std::vector<std::unique_ptr<Medico>> Medico::medicos; // Inicializar el vector de médicos
 
@@ -223,6 +224,105 @@ void Medico::modificarNombreMedico(const std::string& nombreBuscado, const std::
     }
 }
 
+namespace fs = std::filesystem;
+
+void Medico::crearBackupMedicosCSV() {
+
+    std::string nombreArchivo = "Medicos.csv";
+
+    // Verificar si el archivo CSV existe
+    if (!fs::exists(nombreArchivo)) {
+        std::cerr << "El archivo " << nombreArchivo << " no existe." << std::endl;
+        return;
+    }
+
+    // Crear la carpeta "Backups" 
+    std::string carpetaBackup = "Backups";
+    if (!fs::exists(carpetaBackup)) {
+        fs::create_directory(carpetaBackup);
+        std::cout << "Carpeta 'Backups' creada." << std::endl;
+    }
+    else {
+        std::cout << "Carpeta 'Backups' no hace falta crearla porque ya existe." << std::endl;
+    }
+
+    // Crear la carpeta "Pacientes" dentro de la carpeta anterior 
+    std::string carpetaPacientes = "Backups/Medicos";
+    if (!fs::exists(carpetaPacientes)) {
+        fs::create_directory(carpetaPacientes);
+        std::cout << "Carpeta 'Medicos' creada." << std::endl;
+    }
+    else {
+        std::cout << "Carpeta 'Medicos' no hace falta crearla porque ya existe." << std::endl;
+    }
+    // Se obtiene la fecha y hora actual para el nombre del backup
+    std::time_t tiempoActual = std::time(nullptr);
+    std::tm* tm = std::localtime(&tiempoActual);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", tm);
+
+
+    std::string nombreBackup = carpetaPacientes + "/BCK_Medicos_" + std::string(buffer) + ".csv";
+
+    // Aqui se lee el contenido del csv original y se escribe en el archivo de backup
+    std::ifstream archivoOriginal(nombreArchivo);
+    std::ofstream archivoBackup(nombreBackup);
+
+    if (!archivoBackup) {
+        std::cerr << "No se pudo crear el archivo de backup." << std::endl;
+        return;
+    }
+    std::string linea;
+    while (std::getline(archivoOriginal, linea)) {
+        archivoBackup << linea << std::endl;
+    }
+
+    std::cout << "Backup creado: " << nombreBackup << std::endl;
+
+    //Se cierran los archivos
+    archivoOriginal.close();
+    archivoBackup.close();
+}
+
+void Medico::exportarMedicos() {
+
+    std::string nombreCSV = "Medicos.csv";
+    //Nombre del report que se quiere generar
+    std::string nombreTXT = "Medicos_Report.txt";
+
+    // Verificar si el CSV de Pacientes existe
+    if (!fs::exists(nombreCSV)) {
+        std::cerr << "El archivo " << nombreCSV << " no existe." << std::endl;
+        return;
+    }
+    // Abrir el archivo CSV para lectura
+    std::ifstream archivoCSV(nombreCSV);
+    // Abrir el archivo TXT para escritura
+    std::ofstream archivoTXT(nombreTXT);
+
+    if (!archivoTXT) {
+        std::cerr << "No se pudo crear el archivo de texto." << std::endl;
+        return;
+    }
+
+    // Escribir encabezado
+    archivoTXT << "Reporte de Medicos\n";
+    archivoTXT << "=====================\n";
+    archivoTXT << "ID\tNombre\tEspecialidad\n"; // Suponiendo que esas son las columnas
+
+    std::string linea;
+    while (std::getline(archivoCSV, linea)) {
+        archivoTXT << linea << std::endl; // Escribir cada línea del CSV en el archivo TXT
+    }
+
+    std::cout << "Contenido exportado a: " << nombreTXT << std::endl;
+
+    // Cerrar los archivos
+    archivoCSV.close();
+    archivoTXT.close();
+}
+
+
 void Medico::interfazMedicos() {
     int opcion;
     while (true) {
@@ -231,7 +331,9 @@ void Medico::interfazMedicos() {
         std::cout << "2. Buscar medico por nombre\n";
         std::cout << "3. Eliminar medico por nombre\n";
         std::cout << "4. Modificar nombre de medico\n";
-        std::cout << "5. Salir\n";
+        std::cout << "5. Generar BackUp de Pacientes\n";
+        std::cout << "6. Generar Fichero de Pacientes\n";
+        std::cout << "7. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
@@ -273,6 +375,10 @@ void Medico::interfazMedicos() {
             break;
         }
         case 5:
+            Medico::crearBackupMedicosCSV();
+        case 6:
+            Medico::exportarMedicos();
+        case 7:
             return;
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";
