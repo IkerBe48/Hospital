@@ -12,8 +12,8 @@
 
 std::vector<std::unique_ptr<Cita>> Cita::citas;
 
-Cita::Cita(std::unique_ptr<Paciente> paciente, std::unique_ptr<Medico> medico, const std::string& fecha, int urgencia)
-    : paciente(std::move(paciente)), medico(std::move(medico)), fecha(fecha), urgencia(urgencia) {
+Cita::Cita(int id, std::unique_ptr<Paciente> paciente, std::unique_ptr<Medico> medico, const std::string& fecha, int urgencia)
+    : id(id), paciente(std::move(paciente)), medico(std::move(medico)), fecha(fecha), urgencia(urgencia) {
 }
 
 void Cita::crearCitasCSV() {
@@ -75,8 +75,8 @@ bool Cita::guardarCitaEnCSV(const Cita& cita) {
     if (archivo.is_open()) {
         std::cout << "\n Archivo de citas abierto correctamente.\n";
         // Supongamos que agregas un campo id en la clase Cita
-        archivo << cita.urgencia << "," << cita.paciente->getNombre() << "," << cita.medico->getNombre() << "," << cita.fecha << "\n";
-        std::cout << "\n Datos de la cita escritos: | " << cita.paciente->getNombre() << " | con | " << cita.medico->getNombre() << " en | " << cita.fecha << " | \n\n";
+        archivo << cita.id << "," << cita.paciente->getNombre() << "," << cita.medico->getNombre() << "," << cita.fecha << "," << cita.urgencia << "\n";
+        std::cout << "\n Datos de la cita escritos: | " << cita.paciente->getNombre() << " | con | " << cita.medico->getNombre() << " en | " << cita.fecha << " | con nivel de urgencia de | " << cita.urgencia << "\n\n";
         archivo.close();
         return true;
     }
@@ -209,7 +209,7 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
     int nuevoId = obtenerMaxIdCitas() + 1;
     auto paciente = std::make_unique<Paciente>(nuevoId, nombrePaciente, "");
     auto medico = std::make_unique<Medico>(nuevoId, nombreMedico, "");
-    auto nuevaCita = std::make_unique<Cita>(std::move(paciente), std::move(medico), fecha, urgencia);
+    auto nuevaCita = std::make_unique<Cita>(nuevoId, std::move(paciente), std::move(medico), fecha, urgencia);
 
     if (guardarCitaEnCSV(*nuevaCita)) {
         citas.emplace_back(std::move(nuevaCita));
@@ -223,6 +223,7 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
 void Cita::eliminarCita(const std::string& nombreBuscado) {
     std::ifstream archivo("Citas.csv");
     std::vector<std::string> lineas;
+    std::vector<std::string> citasEncontradas;
     std::string linea;
     bool encontrado = false;
 
@@ -243,19 +244,49 @@ void Cita::eliminarCita(const std::string& nombreBuscado) {
         }
         else {
             encontrado = true; // Marcar que encontramos el paciente
+            citasEncontradas.push_back(linea); // Almacenar la cita encontrada
         }
     }
 
     archivo.close(); // Cerrar el archivo después de leer
 
     if (encontrado) {
+        // Mostrar las citas encontradas
+        std::cout << "\nCitas encontradas para | " << nombreBuscado << " |:\n";
+        for (const auto& cita : citasEncontradas) {
+            std::istringstream stream(cita);
+            std::string id, paciente;
+            std::getline(stream, id, ',');
+            std::getline(stream, paciente, ',');
+            std::cout << "ID: " << id << ", Paciente: " << paciente << std::endl;
+        }
+
+        // Solicitar al usuario que seleccione un ID para eliminar
+        std::string idSeleccionado;
+        std::cout << "Ingrese el ID de la cita que desea eliminar: ";
+        std::cin >> idSeleccionado;
+
+        // Filtrar las citas para eliminar la seleccionada
+        lineas.clear(); // Limpiar el vector de líneas para reescribir el archivo
+        for (const auto& cita : citasEncontradas) {
+            std::istringstream stream(cita);
+            std::string id, paciente;
+            std::getline(stream, id, ',');
+            std::getline(stream, paciente, ',');
+
+            if (id != idSeleccionado) {
+                lineas.push_back(cita); // Mantener la cita si no es la seleccionada
+            }
+        }
+
+        // Escribir las citas restantes de nuevo en el archivo
         std::ofstream archivoSalida("Citas.csv");
         if (archivoSalida.is_open()) {
             for (const auto& l : lineas) {
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "\n\n Cita de | " << nombreBuscado << " | eliminado correctamente." << std::endl;
+            std::cout << "\nCita con ID | " << idSeleccionado << " | eliminada correctamente." << std::endl;
         }
         else {
             std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;

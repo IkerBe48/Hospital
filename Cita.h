@@ -16,7 +16,7 @@ public:
 
     static std::vector<std::unique_ptr<Cita>> citas; // Almacena las citas
 
-    Cita(std::unique_ptr<Paciente> paciente, std::unique_ptr<Medico> medico, const std::string& fecha, int urgencia);
+    Cita(int id, std::unique_ptr<Paciente> paciente, std::unique_ptr<Medico> medico, const std::string& fecha, int urgencia);
 
     static void crearCitasCSV();
     static int obtenerMaxIdCitas();
@@ -33,6 +33,7 @@ public:
     static void interfazCitas(); //Menu de Citas
 
 private:
+    int id;
     std::unique_ptr<Paciente> paciente;
     std::unique_ptr<Medico> medico;
     std::string fecha;
