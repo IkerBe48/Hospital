@@ -232,6 +232,11 @@ void Cita::eliminarCita(const std::string& nombreBuscado) {
         return;
     }
 
+    // Leer encabezados
+    std::string encabezado;
+    std::getline(archivo, encabezado); // Leer la primera línea (encabezados)
+    lineas.push_back(encabezado); // Almacenar encabezados
+
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string id, paciente;
@@ -267,7 +272,7 @@ void Cita::eliminarCita(const std::string& nombreBuscado) {
         std::cin >> idSeleccionado;
 
         // Filtrar las citas para eliminar la seleccionada
-        lineas.clear(); // Limpiar el vector de líneas para reescribir el archivo
+        std::vector<std::string> citasRestantes; // Para almacenar las citas restantes
         for (const auto& cita : citasEncontradas) {
             std::istringstream stream(cita);
             std::string id, paciente;
@@ -275,14 +280,17 @@ void Cita::eliminarCita(const std::string& nombreBuscado) {
             std::getline(stream, paciente, ',');
 
             if (id != idSeleccionado) {
-                lineas.push_back(cita); // Mantener la cita si no es la seleccionada
+                citasRestantes.push_back(cita); // Mantener la cita si no es la seleccionada
             }
         }
 
         // Escribir las citas restantes de nuevo en el archivo
         std::ofstream archivoSalida("Citas.csv");
         if (archivoSalida.is_open()) {
-            for (const auto& l : lineas) {
+            // Escribir encabezados
+            archivoSalida << encabezado << "\n";
+            // Escribir citas restantes
+            for (const auto& l : citasRestantes) {
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
@@ -401,7 +409,7 @@ void Cita::interfazCitas() {
         std::cout << "------Menu------\n";
         std::cout << "1. Agregar Cita\n";
         std::cout << "2. Buscar Cita por nombre (PENDIENTE)\n";
-        std::cout << "3. Eliminar Cita por nombre (PENDIENTE)\n";
+        std::cout << "3. Eliminar Cita por Paciente\n";
         std::cout << "4. Modificar Cita (PENDIENTE)\n";
         std::cout << "5. Generar BackUp de Citas\n";
         std::cout << "6. Generar Fichero de Citas\n";
