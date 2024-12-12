@@ -219,6 +219,53 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
         std::cout << "\nError al agregar la cita. Intente nuevamente.\n";
     }
 }
+
+void Cita::eliminarCita(const std::string& nombreBuscado) {
+    std::ifstream archivo("Citas.csv");
+    std::vector<std::string> lineas;
+    std::string linea;
+    bool encontrado = false;
+
+    if (!archivo.is_open()) {
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
+        return;
+    }
+
+    while (std::getline(archivo, linea)) {
+        std::istringstream stream(linea);
+        std::string id, paciente;
+
+        std::getline(stream, id, ','); // Leer ID
+        std::getline(stream, paciente, ','); // Leer paciente
+
+        if (paciente != nombreBuscado) {
+            lineas.push_back(linea);
+        }
+        else {
+            encontrado = true; // Marcar que encontramos el paciente
+        }
+    }
+
+    archivo.close(); // Cerrar el archivo después de leer
+
+    if (encontrado) {
+        std::ofstream archivoSalida("Citas.csv");
+        if (archivoSalida.is_open()) {
+            for (const auto& l : lineas) {
+                archivoSalida << l << "\n";
+            }
+            archivoSalida.close();
+            std::cout << "\n\n Cita de | " << nombreBuscado << " | eliminado correctamente." << std::endl;
+        }
+        else {
+            std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;
+        }
+    }
+    else {
+        std::cout << "\n Cita de | " << nombreBuscado << " | no encontrado." << std::endl;
+    }
+}
+
 namespace fs = std::filesystem;
 
 void Cita::crearBackupCitasCSV() {
@@ -359,7 +406,15 @@ void Cita::interfazCitas() {
             }
             Cita::agregarCita(nombrePaciente, nombreMedico, fecha, urgencia);
             break;
-        } 
+        }
+        case 3: {
+            std::string nombreBuscado;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del paciente que quieras eliminar su cita: ";
+            std::getline(std::cin, nombreBuscado);
+            Cita::eliminarCita(nombreBuscado);
+            break;
+        }
         case 5:
             Cita::crearBackupCitasCSV();
         case 6:
