@@ -16,6 +16,7 @@ public:
     static void buscarPacientePorNombre(const std::string& nombre);
     static void eliminarPaciente(const std::string& nombre);
     static void modificarNombrePaciente(const std::string& nombreBuscado, const std::string& nuevoNombre);
+    static void crearBackupPacientesCSV();
     static void interfazPacientes(); //Menu de Pacientes
 
 private:
@@ -35,6 +36,7 @@ public:
     static void buscarMedicoPorNombre(const std::string& nombre);
     static void eliminarMedico(const std::string& nombre);
     static void modificarNombreMedico(const std::string& nombreBuscado, const std::string& nuevoNombre);
+    static void crearBackupMedicosCSV();
     static void interfazMedicos(); //Menu de Medicos
 
 private:
@@ -48,6 +50,7 @@ public:
     Cita(const std::string& nombrePaciente, const std::string& nombreMedico, const std::string& fecha, int urgencia);
 
     static void agregarCita(const std::string& nombrePaciente, const std::string& nombreMedico, const std::string& fecha, int urgencia);
+    static void crearBackupCitasCSV();
     static void interfazCitas(); //Menu de Citas
 
 private:

@@ -509,7 +509,7 @@ void Cita::interfazCitas() {
         std::cout << "1. Agregar Cita\n";
         std::cout << "2. Buscar Cita por nombre (PENDIENTE)\n";
         std::cout << "3. Eliminar Cita por Paciente\n";
-        std::cout << "4. Modificar Cita (PENDIENTE)\n";
+        std::cout << "4. Modificar fecha de Cita\n";
         std::cout << "5. Generar BackUp de Citas\n";
         std::cout << "6. Generar Fichero de Citas\n";
         std::cout << "5. Salir\n";

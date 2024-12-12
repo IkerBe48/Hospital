@@ -41,41 +41,35 @@ void Hospital::menu() {
             break;
         }
         case 2: {
-            /*std::string nombreBuscado;
-            std::cin.ignore();
-            std::cout << "Ingrese el nombre del paciente a buscar: ";
-            std::getline(std::cin, nombreBuscado);
-            Paciente::buscarPacientePorNombre(nombreBuscado);*/
             Medico::interfazMedicos();
             break;
         }
         case 3: {
-            /*std::string nombreBuscado;
-            std::cin.ignore();
-            std::cout << "Ingrese el nombre del paciente a eliminar: ";
-            std::getline(std::cin, nombreBuscado);
-            Paciente::eliminarPaciente(nombreBuscado);*/
             Cita::interfazCitas();
             break;
         }
+
         case 4: {
-            std::string nombreBuscado, nuevoNombre;
+            /*std::string nombreBuscado, nuevoNombre;
             std::cin.ignore();
             std::cout << "Ingrese el nombre del paciente a modificar: ";
             std::getline(std::cin, nombreBuscado);
             std::cout << "Ingrese el nuevo nombre del paciente: ";
             std::getline(std::cin, nuevoNombre);
-            Paciente::modificarNombrePaciente(nombreBuscado, nuevoNombre);
+            Paciente::modificarNombrePaciente(nombreBuscado, nuevoNombre);*/
             break;
         }
         case 5: {
-            std::string nombre, especialidad;
+            /*std::string nombre, especialidad;
             std::cin.ignore();
             std::cout << "Ingrese nombre del medico: ";
             std::getline(std::cin, nombre);
             std::cout << "Ingrese la especialidad del medico: ";
             std::getline(std::cin, especialidad);
-            Medico::agregarMedico(nombre, especialidad);
+            Medico::agregarMedico(nombre, especialidad);*/
+            Paciente::crearBackupPacientesCSV();
+            Medico::crearBackupMedicosCSV();
+            Cita::crearBackupCitasCSV();
             break;
         }
         case 6: {
