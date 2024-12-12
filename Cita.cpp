@@ -305,6 +305,105 @@ void Cita::eliminarCita(const std::string& nombreBuscado) {
     }
 }
 
+void Cita::modificarFechaCita(const std::string& nombreBuscado, const std::string& nuevaFecha) {
+    std::ifstream archivo("Citas.csv");
+    std::vector<std::string> lineas;
+    std::vector<std::string> citasEncontradas;
+    std::string linea;
+    bool encontrado = false;
+
+    if (!archivo.is_open()) {
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
+        return;
+    }
+
+    // Validar el formato de la fecha (YYYY-MM-DD)
+    std::regex fechaRegex(R"(^\d{4}-\d{2}-\d{2}$)");
+    if (!std::regex_match(nuevaFecha, fechaRegex)) {
+        std::cout << "\n Error: La fecha de la cita debe estar en el formato YYYY-MM-DD.\n";
+        return;
+    }
+
+    // Validar que la fecha cumpla con las características (Año bisiesto, día 31 en meses que corresponde...)
+    if (!esFechaValida(nuevaFecha)) {
+        std::cout << "\n Error: La fecha de la cita no es válida.\n";
+        return;
+    }
+
+    // Leer el archivo y buscar citas
+    while (std::getline(archivo, linea)) {
+        std::istringstream stream(linea);
+        std::string id, paciente, medico, fechaEntrada, urgencia;
+
+        std::getline(stream, id, ','); // Leer ID
+        std::getline(stream, paciente, ','); // Leer paciente
+        std::getline(stream, medico, ','); // Leer médico
+        std::getline(stream, fechaEntrada, ','); // Leer fecha de entrada
+        std::getline(stream, urgencia); // Leer urgencia
+        if (paciente == nombreBuscado) {
+            citasEncontradas.push_back(linea); // Almacenar la cita encontrada
+            encontrado = true; // Marcar que encontramos el paciente
+        }
+
+        lineas.push_back(linea); // Almacenar la línea original
+    }
+
+    archivo.close(); // Cerrar el archivo después de leer
+
+    if (encontrado) {
+        // Mostrar las citas encontradas
+        std::cout << "\nCitas encontradas para | " << nombreBuscado << " |:\n";
+        for (const auto& cita : citasEncontradas) {
+            std::istringstream stream(cita);
+            std::string id, paciente, medico, fechaEntrada, urgencia;
+            std::getline(stream, id, ',');
+            std::getline(stream, paciente, ',');
+            std::getline(stream, medico, ',');
+            std::getline(stream, fechaEntrada, ',');
+            std::getline(stream, urgencia, ',');
+            std::cout << "ID: " << id << ", Paciente: " << paciente << ", Médico: " << medico << ", Fecha: " << fechaEntrada << ", Urgencia: " << urgencia << std::endl;
+        }
+
+        // Solicitar al usuario que seleccione un ID para modificar
+        std::string idSeleccionado;
+        std::cout << "Ingrese el ID de la cita que desea modificar: ";
+        std::cin >> idSeleccionado;
+
+        // Modificar la fecha de la cita seleccionada
+        for (auto& cita : lineas) {
+            std::istringstream stream(cita);
+            std::string id, paciente, medico, fechaEntrada, urgencia;
+            std::getline(stream, id, ',');
+            std::getline(stream, paciente, ',');
+            std::getline(stream, medico, ',');
+            std::getline(stream, fechaEntrada, ',');
+            std::getline(stream, urgencia, ',');
+
+            if (id == idSeleccionado) {
+                fechaEntrada = nuevaFecha; // Cambiar la fecha a la nueva
+                cita = id + "," + paciente + "," + medico + "," + fechaEntrada + "," + urgencia; // Actualizar la línea
+                std::cout << "\nLa cita con ID | " << idSeleccionado << " | ha sido modificada a la nueva fecha: | " << nuevaFecha << " | correctamente." << std::endl;
+            }
+        }
+
+        // Escribir las citas actualizadas de nuevo en el archivo
+        std::ofstream archivoSalida("Citas.csv");
+        if (archivoSalida.is_open()) {
+            // Escribir todas las líneas (incluyendo encabezados)
+            for (const auto& l : lineas) {
+                archivoSalida << l << "\n";
+            }
+            archivoSalida.close();
+        }
+        else {
+            std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;
+        }
+    }
+    else {
+        std::cout << "\n Cita del paciente | " << nombreBuscado << " | no encontrado." << std::endl;
+    }
+}
+
 namespace fs = std::filesystem;
 
 void Cita::crearBackupCitasCSV() {
@@ -452,6 +551,16 @@ void Cita::interfazCitas() {
             std::cout << "Ingrese el nombre del paciente que quieras eliminar su cita: ";
             std::getline(std::cin, nombreBuscado);
             Cita::eliminarCita(nombreBuscado);
+            break;
+        }
+        case 4: {
+            std::string nombreBuscado, nuevaFecha;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del paciente a buscar: ";
+            std::getline(std::cin, nombreBuscado);
+            std::cout << "Ingrese la nueva fecha de la cita (YYYY-MM-DD): ";
+            std::getline(std::cin, nuevaFecha);
+            Cita::modificarFechaCita(nombreBuscado, nuevaFecha);
             break;
         }
         case 5:

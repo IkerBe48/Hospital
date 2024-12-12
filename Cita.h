@@ -29,7 +29,7 @@ public:
     static bool esFechaValida(const std::string& fecha);
     static void exportarCitas();
     static void eliminarCita(const std::string& nombreBuscado);
-    static void modificarMedicoCita(const std::string& medicoBuscado, const std::string& nuevoMedico);
+    static void modificarFechaCita(const std::string& nombreBuscado, const std::string& nuevaFecha);
     static void interfazCitas(); //Menu de Citas
 
 private:
