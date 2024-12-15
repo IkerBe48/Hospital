@@ -677,7 +677,7 @@ void Cita::exportarCitasPorMedico(const std::string& nombreMedico) {
         std::getline(stream, paciente, ','); // Asumiendo que el paciente es la segunda columna
         std::getline(stream, medico, ','); // Asumiendo que el medico es la tercera columna
         std::getline(stream, fecha, ','); // Asumiendo que la fecha de entrada es la cuarta columna
-        std::getline(stream, urgencia); // Asumiendo que la fecha de entrada es la cuarta columna
+        std::getline(stream, urgencia); // Asumiendo que la urgencia es la cuarta columna
 
         // Comparar el nombre del médico con el nombre introducido
         if (medico == nombreMedico) {
@@ -691,6 +691,54 @@ void Cita::exportarCitasPorMedico(const std::string& nombreMedico) {
     }
     else {
         std::cout << "\n Se ha generado el reporte con citas para el médico: " << nombreMedico << std::endl;
+    }
+
+    archivo.close();
+    archivoSalida.close(); // Cerrar el archivo de salida
+}
+void Cita::exportarCitasCronicas() {
+    std::ifstream archivo("Citas.csv");
+    std::ofstream archivoSalida("Citas_Pacientes_Cronicos.txt");
+    std::string linea;
+    bool encontrado = false;
+
+    if (!archivo.is_open()) {
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
+        return;
+    }
+
+    if (!archivoSalida.is_open()) {
+        std::cerr << "\n Error al crear el archivo de salida." << std::endl;
+        return;
+    }
+
+    // Escribir encabezado
+    archivoSalida << "Reporte de Citas de Pacientes Cronicos.\n";
+    archivoSalida << "=====================\n";
+    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; // Suponiendo que esas son las columnas
+
+    while (std::getline(archivo, linea)) {
+        std::istringstream stream(linea);
+        std::string id, paciente, medico, fecha, urgencia;
+
+        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
+        std::getline(stream, paciente, ','); // Asumiendo que el paciente es la segunda columna
+        std::getline(stream, medico, ','); // Asumiendo que el medico es la tercera columna
+        std::getline(stream, fecha, ','); // Asumiendo que la fecha de entrada es la cuarta columna
+        std::getline(stream, urgencia); // Asumiendo que la urgencia es la cuarta columna
+
+        // Comparar el nombre del médico con el nombre introducido
+        if (urgencia == "3") {
+            encontrado = true;
+            archivoSalida << linea << std::endl; // Escribir en el archivo de salida
+        }
+    }
+
+    if (!encontrado) {
+        std::cout << "\n No se encontraron citas con Pacientes cronicos." << std::endl;
+    }
+    else {
+        std::cout << "\n Se ha generado el reporte de citas con Pacientes cronicos. " << std::endl;
     }
 
     archivo.close();
@@ -791,6 +839,10 @@ void Cita::interfazCitas() {
             std::cout << "Ingrese el nombre del Medico ";
             std::getline(std::cin, nombreMedico);
             Cita::exportarCitasPorMedico(nombreMedico);
+            break;
+        }
+        case 9: {
+            Cita::exportarCitasCronicas();
             break;
         }
         case 10:
