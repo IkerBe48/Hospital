@@ -33,8 +33,8 @@ public:
     static void buscarCitasPorFecha(const std::string& fechaInicio, const std::string& fechaFin);
 
     static void exportarCitasPorFecha(const std::string& fechaInicio, const std::string& fechaFin);
-    static void exportarCitasPorMedico(const std::string& fechaInicio, const std::string& fechaFin);
-    static void exportarCitasCronicas(const std::string& fechaInicio, const std::string& fechaFin);
+    static void exportarCitasPorMedico(const std::string& nombreMedico);
+    static void exportarCitasCronicas();
 
     static void interfazCitas(); //Menu de Citas
 

@@ -648,6 +648,55 @@ void Cita::exportarCitasPorFecha(const std::string& fechaInicio, const std::stri
     archivoSalida.close(); // Cerrar el archivo de salida
 }
 
+void Cita::exportarCitasPorMedico(const std::string& nombreMedico) {
+    std::ifstream archivo("Citas.csv");
+    std::ofstream archivoSalida("Citas_de_" + nombreMedico + ".txt");
+    std::string linea;
+    bool encontrado = false;
+
+    if (!archivo.is_open()) {
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
+        return;
+    }
+
+    if (!archivoSalida.is_open()) {
+        std::cerr << "\n Error al crear el archivo de salida." << std::endl;
+        return;
+    }
+
+    // Escribir encabezado
+    archivoSalida << "Reporte de Citas para el Médico: " + nombreMedico + "\n";
+    archivoSalida << "=====================\n";
+    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; // Suponiendo que esas son las columnas
+
+    while (std::getline(archivo, linea)) {
+        std::istringstream stream(linea);
+        std::string id, paciente, medico, fecha, urgencia;
+
+        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
+        std::getline(stream, paciente, ','); // Asumiendo que el paciente es la segunda columna
+        std::getline(stream, medico, ','); // Asumiendo que el medico es la tercera columna
+        std::getline(stream, fecha, ','); // Asumiendo que la fecha de entrada es la cuarta columna
+        std::getline(stream, urgencia); // Asumiendo que la fecha de entrada es la cuarta columna
+
+        // Comparar el nombre del médico con el nombre introducido
+        if (medico == nombreMedico) {
+            encontrado = true;
+            archivoSalida << linea << std::endl; // Escribir en el archivo de salida
+        }
+    }
+
+    if (!encontrado) {
+        std::cout << "\n No se encontraron citas para el médico: " << nombreMedico << std::endl;
+    }
+    else {
+        std::cout << "\n Se ha generado el reporte con citas para el médico: " << nombreMedico << std::endl;
+    }
+
+    archivo.close();
+    archivoSalida.close(); // Cerrar el archivo de salida
+}
+
 void Cita::interfazCitas() {
     int opcion;
     while (true) {
@@ -658,7 +707,10 @@ void Cita::interfazCitas() {
         std::cout << "4. Modificar fecha de Cita\n";
         std::cout << "5. Generar BackUp de Citas\n";
         std::cout << "6. Generar Fichero de Citas\n";
-        std::cout << "5. Salir\n";
+        std::cout << "7. Generar Fichero de Citas en rango de fechas\n";
+        std::cout << "8. Generar Fichero de Citas por Medico\n";
+        std::cout << "9. Generar Fichero de Pacientes graves\n";
+        std::cout << "10. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
@@ -733,7 +785,15 @@ void Cita::interfazCitas() {
             Cita::exportarCitasPorFecha(fechaInicio, fechaFin);
             break;
         }
-        case 8:
+        case 8: {
+            std::string nombreMedico;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del Medico ";
+            std::getline(std::cin, nombreMedico);
+            Cita::exportarCitasPorMedico(nombreMedico);
+            break;
+        }
+        case 10:
             return;
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";
