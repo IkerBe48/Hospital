@@ -20,8 +20,7 @@ void Medico::crearMedicosCSV() {
     if (!archivo) {
         std::ofstream archivoSalida("Medicos.csv");
         if (archivoSalida.is_open()) {
-            archivoSalida << "ID,Nombre,Especialidad\n"; // AGREGAR CAMPO DISPONIBLE BOOL Y QUE SI EL MEDICO TIENE 
-            // DISPONIBLE FALSE, MUESTRE ERROR QUE NO SE PUEDE INTRODUCIR CITA CON DICHO MEDICO
+            archivoSalida << "ID,Nombre,Especialidad\n"; 
             std::cout << "\n Archivo creado y encabezados escritos.\n";
             archivoSalida.close();
         }

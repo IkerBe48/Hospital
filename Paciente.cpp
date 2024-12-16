@@ -22,8 +22,7 @@ void Paciente::crearPacientesCSV() {
     if (!archivo) {
         std::ofstream archivoSalida("Pacientes.csv");
         if (archivoSalida.is_open()) {
-            archivoSalida << "ID,Nombre,Fecha de Ingreso\n"; //AÑADIR CAMPO FECHA SALIDA Y QUE AL AGREGAR SEA NULO. 
-            //USANDO ALGO PARECIDO AL DE MODIFICAR NOMBRE PACIENTE, AGREGAR FECHA SALIDA Y QUE NO PUEDA SER MENOR A LA FECHA INGRESO
+            archivoSalida << "ID,Nombre,Fecha de Ingreso\n"; 
             std::cout << "Archivo creado y encabezados escritos.\n";
         }
         else {
