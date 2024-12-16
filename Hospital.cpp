@@ -20,6 +20,11 @@ Cita::Cita(const std::string& nombrePaciente, const std::string& nombreMedico, c
     : nombrePaciente(nombrePaciente), nombreMedico(nombreMedico), fecha(fecha), urgencia(urgencia) {
 }
 
+// Implementación de métodos de la clase Servicio
+Servicio::Servicio(const std::string& nombrePaciente, const std::string& fecha, const std::string& descripcion)
+    : nombrePaciente(nombrePaciente), fecha(fecha), descripcion(descripcion) {
+}
+
 // Implementación del menú del Hospital
 void Hospital::menu() {
     int opcion;
@@ -28,7 +33,7 @@ void Hospital::menu() {
         std::cout << "1. Apartado Pacientes\n";
         std::cout << "2. Apartado Medicos\n";
         std::cout << "3. Apartado Citas\n";
-        std::cout << "4. Apartado Servicios (PENDIENTE)\n";
+        std::cout << "4. Apartado Servicios\n";
         std::cout << "5. Generar backup\n";
         std::cout << "6. Salir\n";
         std::cout << "\nIntroduce un numero: ";
@@ -49,6 +54,7 @@ void Hospital::menu() {
         }
 
         case 4: {
+            Servicio::interfazServicios();
             break;
         }
         case 5: {

@@ -61,6 +61,21 @@ private:
     static std::vector<std::unique_ptr<Cita>> citas;
 };
 
+class Servicio {
+public:
+    Servicio(const std::string& nombrePaciente, const std::string& fecha, const std::string& descripcion);
+
+    static void agregarServicio(const std::string& nombrePaciente, const std::string& fecha, const std::string& descripcion);
+    static void crearBackupServiciosCSV();
+    static void interfazServicios(); //Menu de Servicios
+
+private:
+    std::string nombrePaciente;
+    std::string fecha;
+    std::string descripcion;
+    static std::vector<std::unique_ptr<Servicio>> servicios;
+};
+
 class Hospital {
 public:
     void menu();
@@ -69,4 +84,5 @@ private:
     std::vector<std::unique_ptr<Paciente>> pacientes;
     std::vector<std::unique_ptr<Medico>> medicos;
     std::vector<std::unique_ptr<Cita>> citas;
+    std::vector<std::unique_ptr<Servicio>> servicios;
 };
