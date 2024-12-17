@@ -188,6 +188,46 @@ bool Servicio::guardarServicioEnCSV(const Servicio& servicio) {
     }
 }
 
+void Servicio::buscarHistorialClinico(const std::string& nombrePaciente) {
+    std::ifstream archivo("Servicios.csv");
+    std::string linea;
+    bool encontrado = false;
+
+    if (!archivo.is_open()) {
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
+        return;
+    }
+
+    // Escribir encabezado en la terminal
+    std::cout << "Historial clinico del Paciente: " + nombrePaciente + "\n";
+    std::cout << "=====================\n";
+    std::cout << "ID\tPaciente\t\tFecha\tDescripcion\n";
+
+    while (std::getline(archivo, linea)) {
+        std::istringstream stream(linea);
+        std::string id, paciente, fecha, descripcion;
+
+        std::getline(stream, id, ',');
+        std::getline(stream, paciente, ',');
+        std::getline(stream, fecha, ',');
+        std::getline(stream, descripcion);
+
+        // Comparar el nombre del paciente con el nombre introducido
+        if (paciente == nombrePaciente) {
+            encontrado = true;
+            std::cout << id << "\t" << paciente << "\t\t" << fecha << "\t" << descripcion << std::endl; // Mostrar en la terminal
+        }
+    }
+
+    if (!encontrado) {
+        std::cout << "\n No se encontraron servicios para el paciente: " << nombrePaciente << std::endl;
+    }
+    else {
+        std::cout << "\nSe han mostrado los servicios para el paciente: " << nombrePaciente << std::endl;
+    }
+
+    archivo.close(); // Cerrar el archivo
+}
 
 namespace fs = std::filesystem;
 
@@ -340,7 +380,7 @@ void Servicio::interfazServicios() {
     while (true) {
         std::cout << "------Menu------\n";
         std::cout << "1. Agregar Servicio\n";
-        std::cout << "2. Mostrar Servicio por paciente\n";
+        std::cout << "2. Mostrar Historial Clinico por paciente\n";
         std::cout << "3. Modificar Servicio\n";
         std::cout << "4. Generar BackUp de Servicios\n";
         std::cout << "5. Generar Fichero de Servicios\n";
@@ -362,6 +402,14 @@ void Servicio::interfazServicios() {
             
             Servicio::agregarServicio(nombrePaciente, fecha, descripcion); 
            
+            break;
+        }
+        case 2: {
+            std::string nombrePaciente;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del paciente ";
+            std::getline(std::cin, nombrePaciente);
+            Servicio::buscarHistorialClinico(nombrePaciente);
             break;
         }
         case 4:
