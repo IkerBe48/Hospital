@@ -189,6 +189,104 @@ bool Servicio::guardarServicioEnCSV(const Servicio& servicio) {
 }
 
 
+namespace fs = std::filesystem;
+
+void Servicio::crearBackupServiciosCSV() {
+
+    std::string nombreArchivo = "Servicios.csv";
+
+    // Verificar si el archivo CSV existe
+    if (!fs::exists(nombreArchivo)) {
+        std::cerr << "El archivo " << nombreArchivo << " no existe." << std::endl;
+        return;
+    }
+
+    // Crear la carpeta "Backups" 
+    std::string carpetaBackup = "Backups";
+    if (!fs::exists(carpetaBackup)) {
+        fs::create_directory(carpetaBackup);
+        std::cout << "Carpeta 'Backups' creada." << std::endl;
+    }
+    else {
+        std::cout << "Carpeta 'Backups' no hace falta crearla porque ya existe." << std::endl;
+    }
+
+    // Crear la carpeta "Pacientes" dentro de la carpeta anterior 
+    std::string carpetaPacientes = "Backups/Servicios";
+    if (!fs::exists(carpetaPacientes)) {
+        fs::create_directory(carpetaPacientes);
+        std::cout << "Carpeta 'Servicios' creada." << std::endl;
+    }
+    else {
+        std::cout << "Carpeta 'Servicios' no hace falta crearla porque ya existe." << std::endl;
+    }
+    // Se obtiene la fecha y hora actual para el nombre del backup
+    std::time_t tiempoActual = std::time(nullptr);
+    std::tm* tm = std::localtime(&tiempoActual);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", tm);
+
+
+    std::string nombreBackup = carpetaPacientes + "/BCK_Servicios_" + std::string(buffer) + ".csv";
+
+    // Aqui se lee el contenido del csv original y se escribe en el archivo de backup
+    std::ifstream archivoOriginal(nombreArchivo);
+    std::ofstream archivoBackup(nombreBackup);
+
+    if (!archivoBackup) {
+        std::cerr << "No se pudo crear el archivo de backup." << std::endl;
+        return;
+    }
+    std::string linea;
+    while (std::getline(archivoOriginal, linea)) {
+        archivoBackup << linea << std::endl;
+    }
+
+    std::cout << "Backup creado: " << nombreBackup << std::endl;
+
+    //Se cierran los archivos
+    archivoOriginal.close();
+    archivoBackup.close();
+}
+
+void Servicio::exportarServicios() {
+
+    std::string nombreCSV = "Servicios.csv";
+    //Nombre del report que se quiere generar
+    std::string nombreTXT = "Servicios_Report.txt";
+
+    // Verificar si el CSV de Pacientes existe
+    if (!fs::exists(nombreCSV)) {
+        std::cerr << "El archivo " << nombreCSV << " no existe." << std::endl;
+        return;
+    }
+    // Abrir el archivo CSV para lectura
+    std::ifstream archivoCSV(nombreCSV);
+    // Abrir el archivo TXT para escritura
+    std::ofstream archivoTXT(nombreTXT);
+
+    if (!archivoTXT) {
+        std::cerr << "No se pudo crear el archivo de texto." << std::endl;
+        return;
+    }
+
+    // Escribir encabezado
+    archivoTXT << "Reporte de Servicios\n";
+    archivoTXT << "=====================\n";
+    archivoTXT << "ID\tPaciente\t\tFecha\tDescripcion\n"; // Suponiendo que esas son las columnas
+
+    std::string linea;
+    while (std::getline(archivoCSV, linea)) {
+        archivoTXT << linea << std::endl; // Escribir cada línea del CSV en el archivo TXT
+    }
+
+    std::cout << "Contenido exportado a: " << nombreTXT << std::endl;
+
+    // Cerrar los archivos
+    archivoCSV.close();
+    archivoTXT.close();
+}
+
 
 void Servicio::interfazServicios() {
     int opcion;
@@ -219,7 +317,10 @@ void Servicio::interfazServicios() {
            
             break;
         }
-        
+        case 4:
+            Servicio::crearBackupServiciosCSV();
+        case 5:
+            Servicio::exportarServicios();
         case 10:
             return;
         default:
