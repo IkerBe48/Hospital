@@ -229,6 +229,98 @@ void Servicio::buscarHistorialClinico(const std::string& nombrePaciente) {
     archivo.close(); // Cerrar el archivo
 }
 
+void Servicio::modificarServiciosDescripcion(const std::string& nombreBuscado, const std::string& nuevaDesc) {
+    std::ifstream archivo("Servicios.csv");
+    std::vector<std::string> lineas;
+    std::string linea;
+    std::vector<std::string> registrosEncontrados;
+    bool encontrado = false;
+
+    if (!archivo.is_open()) {
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
+        return;
+    }
+
+    while (std::getline(archivo, linea)) {
+        std::istringstream stream(linea);
+        std::string id, paciente, fecha, descripcion;
+
+        std::getline(stream, id, ','); // Leer ID
+        std::getline(stream, paciente, ','); // Leer nombre
+        std::getline(stream, fecha, ','); // Leer fecha de ingreso
+        std::getline(stream, descripcion); // Leer descripcion
+
+        if (paciente == nombreBuscado) {
+            registrosEncontrados.push_back(linea); // Almacenar el registro encontrado
+            encontrado = true; // Marcar que encontramos el paciente
+        }
+
+        lineas.push_back(id + "," + paciente + "," + fecha + "," + descripcion);
+    }
+
+    archivo.close(); // Cerrar el archivo después de leer
+
+    if (!encontrado) {
+        std::cout << "\n Paciente | " << nombreBuscado << " | no encontrado." << std::endl;
+        return;
+    }
+
+    // Mostrar los registros encontrados
+    std::cout << "\nSe encontraron los siguientes registros para el paciente: " << nombreBuscado << std::endl;
+    for (const auto& registro : registrosEncontrados) {
+        std::istringstream stream(registro);
+        std::string id, paciente, fecha, descripcion;
+
+        std::getline(stream, id, ',');
+        std::getline(stream, paciente, ',');
+        std::getline(stream, fecha, ',');
+        std::getline(stream, descripcion);
+
+        std::cout << "ID: " << id << ", Paciente: " << paciente << ", Fecha: " << fecha << ", Descripción: " << descripcion << std::endl;
+    }
+
+    // Solicitar al usuario que ingrese el ID del registro que desea modificar
+    std::string idSeleccionado;
+    std::cout << "Por favor, introduce el ID del registro que deseas modificar: ";
+    std::cin >> idSeleccionado;
+
+    // Modificar el registro correspondiente al ID ingresado
+    bool registroModificado = false;
+    for (size_t i = 0; i < lineas.size(); ++i) {
+        std::istringstream stream(lineas[i]);
+        std::string id, paciente, fecha, descripcion;
+
+        std::getline(stream, id, ',');
+        std::getline(stream, paciente, ',');
+        std::getline(stream, fecha, ',');
+        std::getline(stream, descripcion);
+
+        if (id == idSeleccionado) {
+            // Modificar la descripción
+            lineas[i] = id + "," + paciente + "," + fecha + "," + nuevaDesc;
+            registroModificado = true;
+            break; // Salir del bucle una vez que se ha encontrado y modificado el registro
+        }
+    }
+
+    if (registroModificado) {
+        std::ofstream archivoSalida("Servicios.csv");
+        if (archivoSalida.is_open()) {
+            for (const auto& l : lineas) {
+                archivoSalida << l << "\n";
+            }
+            archivoSalida.close();
+            std::cout << "\n\n Descripción del Servicio del paciente | " << nombreBuscado << " | modificada a: | " << nuevaDesc << " | correctamente." << std::endl;
+        }
+        else {
+            std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;
+        }
+    }
+    else {
+        std::cout << "\n No se encontró un registro con el ID: " << idSeleccionado << std::endl;
+    }
+}
+
 namespace fs = std::filesystem;
 
 void Servicio::crearBackupServiciosCSV() {
@@ -381,7 +473,7 @@ void Servicio::interfazServicios() {
         std::cout << "------Menu------\n";
         std::cout << "1. Agregar Servicio\n";
         std::cout << "2. Mostrar Historial Clinico por paciente\n";
-        std::cout << "3. Modificar Servicio\n";
+        std::cout << "3. Modificar descripcion de un Servicio\n";
         std::cout << "4. Generar BackUp de Servicios\n";
         std::cout << "5. Generar Fichero de Servicios\n";
         std::cout << "6. Generar Fichero de Servicios por Paciente\n";
@@ -410,6 +502,16 @@ void Servicio::interfazServicios() {
             std::cout << "Ingrese el nombre del paciente ";
             std::getline(std::cin, nombrePaciente);
             Servicio::buscarHistorialClinico(nombrePaciente);
+            break;
+        }
+        case 3: {
+            std::string nombreBuscado, nuevaDesc;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del paciente a buscar: ";
+            std::getline(std::cin, nombreBuscado);
+            std::cout << "Ingrese la nueva descripcion del Servicio: ";
+            std::getline(std::cin, nuevaDesc);
+           Servicio::modificarServiciosDescripcion(nombreBuscado, nuevaDesc);
             break;
         }
         case 4:
