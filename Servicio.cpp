@@ -176,7 +176,7 @@ bool Servicio::guardarServicioEnCSV(const Servicio& servicio) {
     std::ofstream archivo("Servicios.csv", std::ios::app);
     if (archivo.is_open()) {
         std::cout << "\n Archivo de citas abierto correctamente.\n";
-        // Supongamos que agregas un campo id en la clase Cita
+        //Se agrega el id calculado
         archivo << servicio.id << "," << servicio.paciente->getNombre() << ","  << servicio.fecha << "," << servicio.descripcion << "\n";
         std::cout << "\n Datos del servicio escritos: | " << servicio.paciente->getNombre() << " | con fecha | " << servicio.fecha << " | motivo | " << servicio.descripcion << "\n\n";
         archivo.close();
@@ -273,7 +273,7 @@ void Servicio::exportarServicios() {
     // Escribir encabezado
     archivoTXT << "Reporte de Servicios\n";
     archivoTXT << "=====================\n";
-    archivoTXT << "ID\tPaciente\t\tFecha\tDescripcion\n"; // Suponiendo que esas son las columnas
+    archivoTXT << "ID\tPaciente\t\tFecha\tDescripcion\n"; 
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {
@@ -287,6 +287,53 @@ void Servicio::exportarServicios() {
     archivoTXT.close();
 }
 
+void Servicio::exportarServiciosPorPaciente(const std::string& nombrePaciente) {
+    std::ifstream archivo("Servicios.csv");
+    std::ofstream archivoSalida("Historial_de_" + nombrePaciente + ".txt");
+    std::string linea;
+    bool encontrado = false;
+
+    if (!archivo.is_open()) {
+        std::cerr << "\n Error al abrir el archivo." << std::endl;
+        return;
+    }
+
+    if (!archivoSalida.is_open()) {
+        std::cerr << "\n Error al crear el archivo de salida." << std::endl;
+        return;
+    }
+
+    // Escribir encabezado
+    archivoSalida << "Historial clinico del Paciente: " + nombrePaciente + "\n";
+    archivoSalida << "=====================\n";
+    archivoSalida << "ID\tPaciente\t\tFecha\tDescripcion\n"; 
+
+    while (std::getline(archivo, linea)) {
+        std::istringstream stream(linea);
+        std::string id, paciente, fecha, descripcion;
+
+        std::getline(stream, id, ','); 
+        std::getline(stream, paciente, ',');
+        std::getline(stream, fecha, ','); 
+        std::getline(stream, descripcion); 
+
+        // Comparar el nombre del médico con el nombre introducido
+        if (paciente == nombrePaciente) {
+            encontrado = true;
+            archivoSalida << linea << std::endl; // Escribir en el archivo de salida
+        }
+    }
+
+    if (!encontrado) {
+        std::cout << "\n No se encontraron servicios para el paciente: " << nombrePaciente << std::endl;
+    }
+    else {
+        std::cout << "\nSe ha generado el reporte con servicios para el paciente: " << nombrePaciente << std::endl;
+    }
+
+    archivo.close();
+    archivoSalida.close(); // Cerrar el archivo de salida
+}
 
 void Servicio::interfazServicios() {
     int opcion;
@@ -321,6 +368,14 @@ void Servicio::interfazServicios() {
             Servicio::crearBackupServiciosCSV();
         case 5:
             Servicio::exportarServicios();
+        case 6: {
+            std::string nombrePaciente;
+            std::cin.ignore();
+            std::cout << "Ingrese el nombre del Paciente ";
+            std::getline(std::cin, nombrePaciente);
+            Servicio::exportarServiciosPorPaciente(nombrePaciente);
+            break;
+        }
         case 10:
             return;
         default:

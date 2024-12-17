@@ -338,7 +338,7 @@ void Medico::exportarMedicos() {
     // Escribir encabezado
     archivoTXT << "Reporte de Medicos\n";
     archivoTXT << "=====================\n";
-    archivoTXT << "ID\tNombre\tEspecialidad\n"; // Suponiendo que esas son las columnas
+    archivoTXT << "ID\tNombre\tEspecialidad\n"; 
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {

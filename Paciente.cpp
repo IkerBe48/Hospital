@@ -10,7 +10,7 @@
 #include <filesystem>
 #include <regex>
 
-std::vector<std::unique_ptr<Paciente>> Paciente::pacientes; // Inicializar el vector de médicos
+std::vector<std::unique_ptr<Paciente>> Paciente::pacientes; // Inicializar el vector de pacientes
 
 Paciente::Paciente(int id, const std::string& nombre, const std::string& fechaIngreso)
     : id(id), nombre(nombre), fechaIngreso(fechaIngreso) {
@@ -92,8 +92,8 @@ void Paciente::buscarPaciente(const std::string& nombreBuscado) {
         std::istringstream stream(linea);
         std::string id, nombre;
 
-        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
-        std::getline(stream, nombre, ','); // Asumiendo que el nombre es la segunda columna
+        std::getline(stream, id, ','); 
+        std::getline(stream, nombre, ','); 
 
         if (nombre == nombreBuscado) {
             encontrado = true;
@@ -369,7 +369,7 @@ void Paciente::exportarPacientes() {
     // Escribir encabezado
     archivoTXT << "Reporte de Pacientes\n";
     archivoTXT << "=====================\n";
-    archivoTXT << "ID\tNombre\tFecha de Ingreso\n"; // Suponiendo que esas son las columnas
+    archivoTXT << "ID\tNombre\tFecha de Ingreso\n"; 
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {
@@ -396,9 +396,9 @@ void Paciente::buscarPacientesPorFechaIngreso(const std::string& fechaInicio, co
         std::istringstream stream(linea);
         std::string id, nombre, fechaIngreso;
 
-        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
-        std::getline(stream, nombre, ','); // Asumiendo que el nombre es la segunda columna
-        std::getline(stream, fechaIngreso, ','); // Asumiendo que la fecha de ingreso es la tercera columna
+        std::getline(stream, id, ','); 
+        std::getline(stream, nombre, ','); 
+        std::getline(stream, fechaIngreso, ','); 
 
         if (fechaInicio.empty()) {
             std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";

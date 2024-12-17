@@ -74,7 +74,7 @@ bool Cita::guardarCitaEnCSV(const Cita& cita) {
     std::ofstream archivo("Citas.csv", std::ios::app);
     if (archivo.is_open()) {
         std::cout << "\n Archivo de citas abierto correctamente.\n";
-        // Supongamos que agregas un campo id en la clase Cita
+        // Se agrega el id calculado
         archivo << cita.id << "," << cita.paciente->getNombre() << "," << cita.medico->getNombre() << "," << cita.fecha << "," << cita.urgencia << "\n";
         std::cout << "\n Datos de la cita escritos: | " << cita.paciente->getNombre() << " | con | " << cita.medico->getNombre() << " en | " << cita.fecha << " | con nivel de urgencia de | " << cita.urgencia << "\n\n";
         archivo.close();
@@ -417,10 +417,10 @@ void Cita::buscarCitasPorFecha(const std::string& fechaInicio, const std::string
         std::istringstream stream(linea);
         std::string id, paciente,medico, fecha;
 
-        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
-        std::getline(stream, paciente, ','); // Asumiendo que el paciente es la segunda columna
-        std::getline(stream, medico, ','); // Asumiendo que el medico es la tercera columna
-        std::getline(stream, fecha, ','); // Asumiendo que la fecha de entrada es la tercera columna
+        std::getline(stream, id, ','); 
+        std::getline(stream, paciente, ','); 
+        std::getline(stream, medico, ','); 
+        std::getline(stream, fecha, ','); 
 
         if (fechaInicio.empty()) {
             std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
@@ -553,7 +553,7 @@ void Cita::exportarCitas() {
     // Escribir encabezado
     archivoTXT << "Reporte de Citas\n";
     archivoTXT << "=====================\n";
-    archivoTXT << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; // Suponiendo que esas son las columnas
+    archivoTXT << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; 
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {
@@ -588,16 +588,16 @@ void Cita::exportarCitasPorFecha(const std::string& fechaInicio, const std::stri
     // Escribir encabezado
     archivoSalida << "Reporte de Citas entre " + fechaInicio + " y " + fechaFin+"\n";
     archivoSalida << "=====================\n";
-    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; // Suponiendo que esas son las columnas
+    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n";
 
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string id, paciente, medico, fecha;
 
-        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
-        std::getline(stream, paciente, ','); // Asumiendo que el paciente es la segunda columna
-        std::getline(stream, medico, ','); // Asumiendo que el medico es la tercera columna
-        std::getline(stream, fecha, ','); // Asumiendo que la fecha de entrada es la cuarta columna
+        std::getline(stream, id, ','); 
+        std::getline(stream, paciente, ',');
+        std::getline(stream, medico, ','); 
+        std::getline(stream, fecha, ','); 
 
         if (fechaInicio.empty()) {
             std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
@@ -667,17 +667,17 @@ void Cita::exportarCitasPorMedico(const std::string& nombreMedico) {
     // Escribir encabezado
     archivoSalida << "Reporte de Citas para el Médico: " + nombreMedico + "\n";
     archivoSalida << "=====================\n";
-    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; // Suponiendo que esas son las columnas
+    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; 
 
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string id, paciente, medico, fecha, urgencia;
 
-        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
-        std::getline(stream, paciente, ','); // Asumiendo que el paciente es la segunda columna
-        std::getline(stream, medico, ','); // Asumiendo que el medico es la tercera columna
-        std::getline(stream, fecha, ','); // Asumiendo que la fecha de entrada es la cuarta columna
-        std::getline(stream, urgencia); // Asumiendo que la urgencia es la cuarta columna
+        std::getline(stream, id, ','); 
+        std::getline(stream, paciente, ',');
+        std::getline(stream, medico, ','); 
+        std::getline(stream, fecha, ','); 
+        std::getline(stream, urgencia); 
 
         // Comparar el nombre del médico con el nombre introducido
         if (medico == nombreMedico) {
@@ -715,17 +715,17 @@ void Cita::exportarCitasCronicas() {
     // Escribir encabezado
     archivoSalida << "Reporte de Citas de Pacientes Cronicos.\n";
     archivoSalida << "=====================\n";
-    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; // Suponiendo que esas son las columnas
+    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; 
 
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string id, paciente, medico, fecha, urgencia;
 
-        std::getline(stream, id, ','); // Asumiendo que el ID es la primera columna
-        std::getline(stream, paciente, ','); // Asumiendo que el paciente es la segunda columna
-        std::getline(stream, medico, ','); // Asumiendo que el medico es la tercera columna
-        std::getline(stream, fecha, ','); // Asumiendo que la fecha de entrada es la cuarta columna
-        std::getline(stream, urgencia); // Asumiendo que la urgencia es la cuarta columna
+        std::getline(stream, id, ','); 
+        std::getline(stream, paciente, ','); 
+        std::getline(stream, medico, ',');
+        std::getline(stream, fecha, ','); 
+        std::getline(stream, urgencia); 
 
         // Comparar el nombre del médico con el nombre introducido
         if (urgencia == "3") {
