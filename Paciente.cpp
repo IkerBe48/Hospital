@@ -148,45 +148,63 @@ bool Paciente::esFechaValida(const std::string& fecha) {
 }
 
 void Paciente::agregarPaciente(const std::string& nombre, const std::string& fechaIngreso) {
-    // Validar los datos de entrada
-    if (nombre.empty()) {
-        std::cout << "\n Error: El nombre no puede estar vacío.\n";
-        return;
-    }
+    try {
+        // Validar los datos de entrada
+        if (nombre.empty()) {
+            std::cout << "\n Error: El nombre no puede estar vacío.\n";
+            return;
+        }
 
-    if (fechaIngreso.empty()) {
-        std::cout << "\n Error: La fecha de ingreso no puede estar vacía.\n";
-        return;
-    }
-    if (fechaIngreso.empty()) {
-        std::cout << "\n Error: La fecha de ingreso no puede estar vacía.\n";
-        return;
-    }
+        if (fechaIngreso.empty()) {
+            std::cout << "\n Error: La fecha de ingreso no puede estar vacía.\n";
+            return;
+        }
 
-    // Validar el formato de la fecha (DD-MM-YYYY)
-    std::regex fechaRegex(R"(^\d{4}-\d{2}-\d{2}$)");
-    if (!std::regex_match(fechaIngreso, fechaRegex)) {
-        std::cout << "\n Error: La fecha de ingreso debe estar en el formato YYYY-MM-DD.\n";
-        return;
-    }
-    // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
-    if (!esFechaValida(fechaIngreso)) {
-        std::cout << "\n Error: La fecha de ingreso no es válida.\n";
-        return;
-    }
+        // Validar el formato de la fecha (YYYY-MM-DD)
+        std::regex fechaRegex(R"(^\d{4}-\d{2}-\d{2}$)");
+        if (!std::regex_match(fechaIngreso, fechaRegex)) {
+            std::cout << "\n Error: La fecha de ingreso debe estar en el formato YYYY-MM-DD.\n";
+            return;
+        }
 
-    crearPacientesCSV();
+        // Validar que la fecha cumpla con las características (Año bisiesto, día 31 en meses que corresponde...)
+        if (!esFechaValida(fechaIngreso)) {
+            std::cout << "\n Error: La fecha de ingreso no es válida.\n";
+            return;
+        }
 
-    int nuevoId = obtenerMaxId() + 1;
-    auto nuevoPaciente = std::make_unique<Paciente>(nuevoId, nombre, fechaIngreso);
-    if (guardarPacienteEnCSV(*nuevoPaciente)) {
-        pacientes.emplace_back(std::move(nuevoPaciente));
-        std::cout << "\n Paciente agregado correctamente con ID: " << nuevoId << "\n";
+        crearPacientesCSV();
+
+        int nuevoId = obtenerMaxId() + 1;
+        auto nuevoPaciente = std::make_unique<Paciente>(nuevoId, nombre, fechaIngreso);
+
+        // Verificar que el nuevo paciente se haya creado correctamente
+        if (!nuevoPaciente) {
+            std::cout << "\n Error: No se pudo crear el nuevo paciente.\n";
+            return;
+        }
+
+        // Guardar el paciente en CSV y agregarlo al vector solo si se guardó correctamente
+        if (guardarPacienteEnCSV(*nuevoPaciente)) {
+            pacientes.emplace_back(std::move(nuevoPaciente));
+            std::cout << "\n Paciente agregado correctamente con ID: " << nuevoId << "\n";
+        }
+        else {
+            std::cout << "\n Error al agregar el paciente. Intente nuevamente.\n";
+        }
+
+        // Opcional: Limpiar punteros nulos en el vector (si es necesario)
+        pacientes.erase(std::remove_if(pacientes.begin(), pacientes.end(),
+            [](const std::unique_ptr<Paciente>& ptr) { return ptr == nullptr; }), pacientes.end());
     }
-    else {
-        std::cout << "\n Error al agregar el paciente. Intente nuevamente.\n";
+    catch (const std::exception& e) {
+        std::cout << "\n Se produjo una excepción: " << e.what() << "\n";
+    }
+    catch (...) {
+        std::cout << "\n Se produjo una excepción desconocida.\n";
     }
 }
+
 
 void Paciente::buscarPacientePorNombre(const std::string& nombreBuscado) {
     buscarPaciente(nombreBuscado); // Llamar al método de búsqueda

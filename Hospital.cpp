@@ -1,9 +1,9 @@
 ﻿#include "Hospital.h"
 
 // Inicialización de vectores estáticos
-//std::vector<std::unique_ptr<Paciente>> Paciente::pacientes;
-//std::vector<std::unique_ptr<Medico>> Medico::medicos;
-//std::vector<std::unique_ptr<Cita>> Cita::citas;
+std::vector<std::unique_ptr<Paciente>> Paciente::pacientes;
+std::vector<std::unique_ptr<Medico>> Medico::medicos;
+std::vector<std::unique_ptr<Cita>> Cita::citas;
 
 // Implementación de métodos de la clase Paciente
 Paciente::Paciente(const std::string& nombre, const std::string& fechaIngreso)
@@ -61,6 +61,7 @@ void Hospital::menu() {
             Paciente::crearBackupPacientesCSV();
             Medico::crearBackupMedicosCSV();
             Cita::crearBackupCitasCSV();
+            Servicio::crearBackupServiciosCSV();
             break;
         }
         case 6:

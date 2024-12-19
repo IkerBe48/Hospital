@@ -526,7 +526,7 @@ void Servicio::interfazServicios() {
             Servicio::exportarServiciosPorPaciente(nombrePaciente);
             break;
         }
-        case 10:
+        case 7:
             return;
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";
