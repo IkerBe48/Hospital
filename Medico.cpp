@@ -415,8 +415,10 @@ void Medico::interfazMedicos() {
         }
         case 6:
             Medico::crearBackupMedicosCSV();
+            break;
         case 7:
             Medico::exportarMedicos();
+            break;
         case 8:
             return;
         default:

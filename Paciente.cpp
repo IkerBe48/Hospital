@@ -501,8 +501,10 @@ void Paciente::interfazPacientes() {
         }
         case 5:
             Paciente::crearBackupPacientesCSV();
+            break;
         case 6:
             Paciente::exportarPacientes();
+            break;
         case 7: {
             std::string fechaInicio, fechaFin;
             std::cin.ignore();

@@ -821,8 +821,10 @@ void Cita::interfazCitas() {
         }
         case 5:
             Cita::crearBackupCitasCSV();
+            break;
         case 6:
             Cita::exportarCitas();
+            break;
         case 7: {
             std::string fechaInicio, fechaFin;
             std::cin.ignore();

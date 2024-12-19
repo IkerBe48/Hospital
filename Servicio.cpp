@@ -491,9 +491,7 @@ void Servicio::interfazServicios() {
             std::getline(std::cin, fecha);
             std::cout << "Ingrese una descripcion: ";
             std::getline(std::cin, descripcion);
-            
             Servicio::agregarServicio(nombrePaciente, fecha, descripcion); 
-           
             break;
         }
         case 2: {
@@ -516,8 +514,10 @@ void Servicio::interfazServicios() {
         }
         case 4:
             Servicio::crearBackupServiciosCSV();
+            break;
         case 5:
             Servicio::exportarServicios();
+            break;
         case 6: {
             std::string nombrePaciente;
             std::cin.ignore();
