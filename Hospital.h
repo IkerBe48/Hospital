@@ -85,9 +85,9 @@ class Hospital {
 public:
     void menu();
 
-private:
+/*private:
     std::vector<std::unique_ptr<Paciente>> pacientes;
     std::vector<std::unique_ptr<Medico>> medicos;
     std::vector<std::unique_ptr<Cita>> citas;
-    std::vector<std::unique_ptr<Servicio>> servicios;
+    std::vector<std::unique_ptr<Servicio>> servicios;*/
 };
