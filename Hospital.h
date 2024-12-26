@@ -5,14 +5,19 @@
 #include <memory>
 #include <string>
 
-class Paciente {
+#include "Paciente.h"
+#include "Medico.h"
+#include "Cita.h"
+#include "Servicio.h"
+
+/*class Paciente {
 public:
     Paciente(const std::string& nombre, const std::string& fechaIngreso);
 
     std::string getNombre() const { return nombre; }
     std::string getFechaIngreso() const { return fechaIngreso; }
 
-    static void agregarPaciente(const std::string& nombre, const std::string& fechaIngreso);
+    //static void agregarPaciente(const std::string& nombre, const std::string& fechaIngreso);
     static void buscarPacientePorNombre(const std::string& nombre);
     static void eliminarPaciente(const std::string& nombre);
     static void modificarNombrePaciente(const std::string& nombreBuscado, const std::string& nuevoNombre);
@@ -24,8 +29,8 @@ private:
     std::string fechaIngreso;
     static std::vector<std::unique_ptr<Paciente>> pacientes;
 };
-
-class Medico {
+*/
+/*class Medico {
 public:
     Medico(const std::string& nombre, const std::string& especialidad);
 
@@ -75,7 +80,7 @@ private:
     std::string descripcion;
     static std::vector<std::unique_ptr<Servicio>> servicios;
 };
-
+*/
 class Hospital {
 public:
     void menu();
