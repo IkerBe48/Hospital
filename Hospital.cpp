@@ -1,31 +1,31 @@
 ﻿#include "Hospital.h"
 
-// Inicialización de vectores estáticos
-std::vector<std::unique_ptr<Paciente>> Paciente::pacientes;
+// Inicializacion de vectores estaticos
+/*std::vector<std::unique_ptr<Paciente>> Paciente::pacientes;
 std::vector<std::unique_ptr<Medico>> Medico::medicos;
 std::vector<std::unique_ptr<Cita>> Cita::citas;
 
-// Implementación de métodos de la clase Paciente
+// Implementacion de metodos de la clase Paciente
 Paciente::Paciente(const std::string& nombre, const std::string& fechaIngreso)
     : nombre(nombre), fechaIngreso(fechaIngreso) {
 }
 
-// Implementación de métodos de la clase Medico
+// Implementacion de metodos de la clase Medico
 Medico::Medico(const std::string& nombre, const std::string& especialidad)
     : nombre(nombre), especialidad(especialidad) {
 }
 
-// Implementación de métodos de la clase Cita
+// Implementacion de metodos de la clase Cita
 Cita::Cita(const std::string& nombrePaciente, const std::string& nombreMedico, const std::string& fecha, int urgencia)
     : nombrePaciente(nombrePaciente), nombreMedico(nombreMedico), fecha(fecha), urgencia(urgencia) {
 }
 
-// Implementación de métodos de la clase Servicio
+// Implementacion de metodos de la clase Servicio
 Servicio::Servicio(const std::string& nombrePaciente, const std::string& fecha, const std::string& descripcion)
     : nombrePaciente(nombrePaciente), fecha(fecha), descripcion(descripcion) {
 }
-
-// Implementación del menú del Hospital
+*/
+// Implementacion del menu del Hospital
 void Hospital::menu() {
     int opcion;
     while (true) {
@@ -65,7 +65,8 @@ void Hospital::menu() {
             break;
         }
         case 6:
-            return;
+            std::cout << "Saliendo del programa...\n";
+            exit(0); // Cierra la aplicación
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";
         }

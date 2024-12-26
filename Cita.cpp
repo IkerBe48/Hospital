@@ -35,7 +35,7 @@ void Cita::crearCitasCSV() {
             std::ofstream archivoSalida("Citas.csv", std::ios::app);
             if (archivoSalida.is_open()) {
                 archivoSalida << "ID,Paciente,Medico,fecha de entrada,urgencia\n";
-                std::cout << "\n Encabezados escritos en el archivo vacío.\n";
+                std::cout << "\n Encabezados escritos en el archivo vacio.\n";
                 archivoSalida.close();
             }
             else {
@@ -43,7 +43,7 @@ void Cita::crearCitasCSV() {
             }
         }
         else {
-            std::cout << "\n El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
+            std::cout << "\n El archivo ya existe y no esta vacio, no se escribieron encabezados.\n";
         }
     }
 
@@ -117,7 +117,7 @@ bool Cita::buscarMedicoEnCSV(const std::string& nombreBuscado) {
     std::string linea;
 
     if (!archivo.is_open()) {
-        std::cerr << "\nError al abrir el archivo de médicos." << std::endl;
+        std::cerr << "\nError al abrir el archivo de medicos." << std::endl;
         return false;
     }
 
@@ -149,7 +149,7 @@ bool Cita::esFechaValida(const std::string& fecha) {
     std::istringstream fechaStream(fecha);
     fechaStream >> anio >> separador1 >> mes >> separador2 >> dia;
 
-    // Verificar que se hayan leído correctamente los separadores
+    // Verificar que se hayan leido correctamente los separadores
     if (separador1 != '-' || separador2 != '-') {
         return false;
     }
@@ -159,21 +159,21 @@ bool Cita::esFechaValida(const std::string& fecha) {
         return false;
     }
 
-    // Validar el rango de días según el mes
+    // Validar el rango de dias segun el mes
     switch (mes) {
-    case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 días
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 dias
         return (dia >= 1 && dia <= 31);
-    case 4: case 6: case 9: case 11: // Meses con 30 días
+    case 4: case 6: case 9: case 11: // Meses con 30 dias
         return (dia >= 1 && dia <= 30);
     case 2: // Febrero
         if (esAnioBisiesto(anio)) {
-            return (dia >= 1 && dia <= 29); // 29 días en año bisiesto
+            return (dia >= 1 && dia <= 29); // 29 dias en año bisiesto
         }
         else {
-            return (dia >= 1 && dia <= 28); // 28 días en año no bisiesto
+            return (dia >= 1 && dia <= 28); // 28 dias en año no bisiesto
         }
     default:
-        return false; // No debería llegar aquí
+        return false; // No deberia llegar aqui
     }
 }
 
@@ -186,11 +186,11 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
     }
 
     if (!buscarMedicoEnCSV(nombreMedico)) {
-        std::cout << "\nEl médico | " << nombreMedico << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
+        std::cout << "\nEl medico | " << nombreMedico << " | no existe en el sistema. No se puede agregar la cita." << std::endl;
         return;
     }
     if (fecha.empty()) {
-        std::cout << "\n Error: La fecha de la cita no puede estar vacía.\n";
+        std::cout << "\n Error: La fecha de la cita no puede estar vacia.\n";
         return;
     }
 
@@ -202,7 +202,7 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
     }
     // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
     if (!esFechaValida(fecha)) {
-        std::cout << "\n Error: La fecha de la cita no es válida.\n";
+        std::cout << "\n Error: La fecha de la cita no es valida.\n";
         return;
     }
 
@@ -234,7 +234,7 @@ void Cita::eliminarCita(const std::string& nombreBuscado) {
 
     // Leer encabezados
     std::string encabezado;
-    std::getline(archivo, encabezado); // Leer la primera línea (encabezados)
+    std::getline(archivo, encabezado); // Leer la primera linea (encabezados)
     lineas.push_back(encabezado); // Almacenar encabezados
 
     while (std::getline(archivo, linea)) {
@@ -253,7 +253,7 @@ void Cita::eliminarCita(const std::string& nombreBuscado) {
         }
     }
 
-    archivo.close(); // Cerrar el archivo después de leer
+    archivo.close(); // Cerrar el archivo despues de leer
 
     if (encontrado) {
         // Mostrar las citas encontradas
@@ -324,9 +324,9 @@ void Cita::modificarFechaCita(const std::string& nombreBuscado, const std::strin
         return;
     }
 
-    // Validar que la fecha cumpla con las características (Año bisiesto, día 31 en meses que corresponde...)
+    // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
     if (!esFechaValida(nuevaFecha)) {
-        std::cout << "\n Error: La fecha de la cita no es válida.\n";
+        std::cout << "\n Error: La fecha de la cita no es valida.\n";
         return;
     }
 
@@ -337,7 +337,7 @@ void Cita::modificarFechaCita(const std::string& nombreBuscado, const std::strin
 
         std::getline(stream, id, ','); // Leer ID
         std::getline(stream, paciente, ','); // Leer paciente
-        std::getline(stream, medico, ','); // Leer médico
+        std::getline(stream, medico, ','); // Leer medico
         std::getline(stream, fechaEntrada, ','); // Leer fecha de entrada
         std::getline(stream, urgencia); // Leer urgencia
         if (paciente == nombreBuscado) {
@@ -345,10 +345,10 @@ void Cita::modificarFechaCita(const std::string& nombreBuscado, const std::strin
             encontrado = true; // Marcar que encontramos el paciente
         }
 
-        lineas.push_back(linea); // Almacenar la línea original
+        lineas.push_back(linea); // Almacenar la linea original
     }
 
-    archivo.close(); // Cerrar el archivo después de leer
+    archivo.close(); // Cerrar el archivo despues de leer
 
     if (encontrado) {
         // Mostrar las citas encontradas
@@ -361,7 +361,7 @@ void Cita::modificarFechaCita(const std::string& nombreBuscado, const std::strin
             std::getline(stream, medico, ',');
             std::getline(stream, fechaEntrada, ',');
             std::getline(stream, urgencia, ',');
-            std::cout << "ID: " << id << ", Paciente: " << paciente << ", Médico: " << medico << ", Fecha: " << fechaEntrada << ", Urgencia: " << urgencia << std::endl;
+            std::cout << "ID: " << id << ", Paciente: " << paciente << ", Medico: " << medico << ", Fecha: " << fechaEntrada << ", Urgencia: " << urgencia << std::endl;
         }
 
         // Solicitar al usuario que seleccione un ID para modificar
@@ -381,7 +381,7 @@ void Cita::modificarFechaCita(const std::string& nombreBuscado, const std::strin
 
             if (id == idSeleccionado) {
                 fechaEntrada = nuevaFecha; // Cambiar la fecha a la nueva
-                cita = id + "," + paciente + "," + medico + "," + fechaEntrada + "," + urgencia; // Actualizar la línea
+                cita = id + "," + paciente + "," + medico + "," + fechaEntrada + "," + urgencia; // Actualizar la linea
                 std::cout << "\nLa cita con ID | " << idSeleccionado << " | ha sido modificada a la nueva fecha: | " << nuevaFecha << " | correctamente." << std::endl;
             }
         }
@@ -389,7 +389,7 @@ void Cita::modificarFechaCita(const std::string& nombreBuscado, const std::strin
         // Escribir las citas actualizadas de nuevo en el archivo
         std::ofstream archivoSalida("Citas.csv");
         if (archivoSalida.is_open()) {
-            // Escribir todas las líneas (incluyendo encabezados)
+            // Escribir todas las lineas (incluyendo encabezados)
             for (const auto& l : lineas) {
                 archivoSalida << l << "\n";
             }
@@ -423,12 +423,12 @@ void Cita::buscarCitasPorFecha(const std::string& fechaInicio, const std::string
         std::getline(stream, fecha, ','); 
 
         if (fechaInicio.empty()) {
-            std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
+            std::cout << "\n Error: La fecha de inicio no puede estar vacia.\n";
             return;
         }
 
         if (fechaFin.empty()) {
-            std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
+            std::cout << "\n Error: La fecha de inicio no puede estar vacia.\n";
             return;
         }
 
@@ -445,13 +445,13 @@ void Cita::buscarCitasPorFecha(const std::string& fechaInicio, const std::string
         }
         // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
         if (!esFechaValida(fechaInicio)) {
-            std::cout << "\n Error: La fecha de inicio no es válida.\n";
+            std::cout << "\n Error: La fecha de inicio no es valida.\n";
             return;
         }
 
         // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
         if (!esFechaValida(fechaFin)) {
-            std::cout << "\n Error: La fecha fin no es válida.\n";
+            std::cout << "\n Error: La fecha fin no es valida.\n";
             return;
         }
 
@@ -557,7 +557,7 @@ void Cita::exportarCitas() {
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {
-        archivoTXT << linea << std::endl; // Escribir cada línea del CSV en el archivo TXT
+        archivoTXT << linea << std::endl; // Escribir cada linea del CSV en el archivo TXT
     }
 
     std::cout << "Contenido exportado a: " << nombreTXT << std::endl;
@@ -600,12 +600,12 @@ void Cita::exportarCitasPorFecha(const std::string& fechaInicio, const std::stri
         std::getline(stream, fecha, ','); 
 
         if (fechaInicio.empty()) {
-            std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
+            std::cout << "\n Error: La fecha de inicio no puede estar vacia.\n";
             return;
         }
 
         if (fechaFin.empty()) {
-            std::cout << "\n Error: La fecha de fin no puede estar vacía.\n";
+            std::cout << "\n Error: La fecha de fin no puede estar vacia.\n";
             return;
         }
 
@@ -621,14 +621,14 @@ void Cita::exportarCitasPorFecha(const std::string& fechaInicio, const std::stri
             return;
         }
 
-        // Validar que la fecha cumpla con las características (Año bisiesto, día 31 en meses que corresponde...)
+        // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
         if (!esFechaValida(fechaInicio)) {
-            std::cout << "\n Error: La fecha de inicio no es válida.\n";
+            std::cout << "\n Error: La fecha de inicio no es valida.\n";
             return;
         }
 
         if (!esFechaValida(fechaFin)) {
-            std::cout << "\n Error: La fecha fin no es válida.\n";
+            std::cout << "\n Error: La fecha fin no es valida.\n";
             return;
         }
 
@@ -665,7 +665,7 @@ void Cita::exportarCitasPorMedico(const std::string& nombreMedico) {
     }
 
     // Escribir encabezado
-    archivoSalida << "Reporte de Citas para el Médico: " + nombreMedico + "\n";
+    archivoSalida << "Reporte de Citas para el Medico: " + nombreMedico + "\n";
     archivoSalida << "=====================\n";
     archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; 
 
@@ -679,7 +679,7 @@ void Cita::exportarCitasPorMedico(const std::string& nombreMedico) {
         std::getline(stream, fecha, ','); 
         std::getline(stream, urgencia); 
 
-        // Comparar el nombre del médico con el nombre introducido
+        // Comparar el nombre del medico con el nombre introducido
         if (medico == nombreMedico) {
             encontrado = true;
             archivoSalida << linea << std::endl; // Escribir en el archivo de salida
@@ -687,10 +687,10 @@ void Cita::exportarCitasPorMedico(const std::string& nombreMedico) {
     }
 
     if (!encontrado) {
-        std::cout << "\n No se encontraron citas para el médico: " << nombreMedico << std::endl;
+        std::cout << "\n No se encontraron citas para el medico: " << nombreMedico << std::endl;
     }
     else {
-        std::cout << "\n Se ha generado el reporte con citas para el médico: " << nombreMedico << std::endl;
+        std::cout << "\n Se ha generado el reporte con citas para el medico: " << nombreMedico << std::endl;
     }
 
     archivo.close();
@@ -727,7 +727,7 @@ void Cita::exportarCitasCronicas() {
         std::getline(stream, fecha, ','); 
         std::getline(stream, urgencia); 
 
-        // Comparar el nombre del médico con el nombre introducido
+        // Comparar el nombre del medico con el nombre introducido
         if (urgencia == "3") {
             encontrado = true;
             archivoSalida << linea << std::endl; // Escribir en el archivo de salida
@@ -777,15 +777,15 @@ void Cita::interfazCitas() {
                 std::cout << "Ingrese urgencia (1: baja, 2: media, 3: alta): ";
                 std::cin >> urgencia;
 
-                // Verificar si la entrada es válida
+                // Verificar si la entrada es valida
                 if (std::cin.fail() || urgencia < 1 || urgencia > 3) {
                     std::cin.clear(); // Limpiar el estado de error
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorar la entrada incorrecta
-                    std::cout << "Urgencia inválida. Por favor, ingrese un numero del 1 al 3." << std::endl;
+                    std::cout << "Urgencia invalida. Por favor, ingrese un numero del 1 al 3." << std::endl;
                 }
                 else {
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Limpiar el buffer
-                    break; // Salir del bucle si la entrada es válida
+                    break; // Salir del bucle si la entrada es valida
                 }
             }
             Cita::agregarCita(nombrePaciente, nombreMedico, fecha, urgencia);

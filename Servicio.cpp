@@ -34,7 +34,7 @@ void Servicio::crearServiciosCSV() {
             std::ofstream archivoSalida("Servicios.csv", std::ios::app);
             if (archivoSalida.is_open()) {
                 archivoSalida << "ID,Paciente,fecha,descripcion\n";
-                std::cout << "\n Encabezados escritos en el archivo vacío.\n";
+                std::cout << "\n Encabezados escritos en el archivo vacio.\n";
                 archivoSalida.close();
             }
             else {
@@ -42,7 +42,7 @@ void Servicio::crearServiciosCSV() {
             }
         }
         else {
-            std::cout << "\n El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
+            std::cout << "\n El archivo ya existe y no esta vacio, no se escribieron encabezados.\n";
         }
     }
 
@@ -106,7 +106,7 @@ bool Servicio::esFechaValida(const std::string& fecha) {
     std::istringstream fechaStream(fecha);
     fechaStream >> anio >> separador1 >> mes >> separador2 >> dia;
 
-    // Verificar que se hayan leído correctamente los separadores
+    // Verificar que se hayan leido correctamente los separadores
     if (separador1 != '-' || separador2 != '-') {
         return false;
     }
@@ -116,21 +116,21 @@ bool Servicio::esFechaValida(const std::string& fecha) {
         return false;
     }
 
-    // Validar el rango de días según el mes
+    // Validar el rango de dias segun el mes
     switch (mes) {
-    case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 días
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 dias
         return (dia >= 1 && dia <= 31);
-    case 4: case 6: case 9: case 11: // Meses con 30 días
+    case 4: case 6: case 9: case 11: // Meses con 30 dias
         return (dia >= 1 && dia <= 30);
     case 2: // Febrero
         if (esAnioBisiesto(anio)) {
-            return (dia >= 1 && dia <= 29); // 29 días en año bisiesto
+            return (dia >= 1 && dia <= 29); // 29 dias en año bisiesto
         }
         else {
-            return (dia >= 1 && dia <= 28); // 28 días en año no bisiesto
+            return (dia >= 1 && dia <= 28); // 28 dias en año no bisiesto
         }
     default:
-        return false; // No debería llegar aquí
+        return false; // No deberia llegar aqui
     }
 }
 
@@ -143,7 +143,7 @@ void Servicio::agregarServicio(const std::string& nombrePaciente, const std::str
     }
 
     if (fecha.empty()) {
-        std::cout << "\n Error: La fecha de la cita no puede estar vacía.\n";
+        std::cout << "\n Error: La fecha de la cita no puede estar vacia.\n";
         return;
     }
 
@@ -155,7 +155,7 @@ void Servicio::agregarServicio(const std::string& nombrePaciente, const std::str
     }
     // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
     if (!esFechaValida(fecha)) {
-        std::cout << "\n Error: La fecha de la cita no es válida.\n";
+        std::cout << "\n Error: La fecha de la cita no es valida.\n";
         return;
     }
 
@@ -258,7 +258,7 @@ void Servicio::modificarServiciosDescripcion(const std::string& nombreBuscado, c
         lineas.push_back(id + "," + paciente + "," + fecha + "," + descripcion);
     }
 
-    archivo.close(); // Cerrar el archivo después de leer
+    archivo.close(); // Cerrar el archivo despues de leer
 
     if (!encontrado) {
         std::cout << "\n Paciente | " << nombreBuscado << " | no encontrado." << std::endl;
@@ -276,7 +276,7 @@ void Servicio::modificarServiciosDescripcion(const std::string& nombreBuscado, c
         std::getline(stream, fecha, ',');
         std::getline(stream, descripcion);
 
-        std::cout << "ID: " << id << ", Paciente: " << paciente << ", Fecha: " << fecha << ", Descripción: " << descripcion << std::endl;
+        std::cout << "ID: " << id << ", Paciente: " << paciente << ", Fecha: " << fecha << ", Descripcion: " << descripcion << std::endl;
     }
 
     // Solicitar al usuario que ingrese el ID del registro que desea modificar
@@ -296,7 +296,7 @@ void Servicio::modificarServiciosDescripcion(const std::string& nombreBuscado, c
         std::getline(stream, descripcion);
 
         if (id == idSeleccionado) {
-            // Modificar la descripción
+            // Modificar la descripcion
             lineas[i] = id + "," + paciente + "," + fecha + "," + nuevaDesc;
             registroModificado = true;
             break; // Salir del bucle una vez que se ha encontrado y modificado el registro
@@ -310,14 +310,14 @@ void Servicio::modificarServiciosDescripcion(const std::string& nombreBuscado, c
                 archivoSalida << l << "\n";
             }
             archivoSalida.close();
-            std::cout << "\n\n Descripción del Servicio del paciente | " << nombreBuscado << " | modificada a: | " << nuevaDesc << " | correctamente." << std::endl;
+            std::cout << "\n\n Descripcion del Servicio del paciente | " << nombreBuscado << " | modificada a: | " << nuevaDesc << " | correctamente." << std::endl;
         }
         else {
             std::cerr << "\n Error al abrir el archivo para escribir." << std::endl;
         }
     }
     else {
-        std::cout << "\n No se encontró un registro con el ID: " << idSeleccionado << std::endl;
+        std::cout << "\n No se encontro un registro con el ID: " << idSeleccionado << std::endl;
     }
 }
 
@@ -409,7 +409,7 @@ void Servicio::exportarServicios() {
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {
-        archivoTXT << linea << std::endl; // Escribir cada línea del CSV en el archivo TXT
+        archivoTXT << linea << std::endl; // Escribir cada linea del CSV en el archivo TXT
     }
 
     std::cout << "Contenido exportado a: " << nombreTXT << std::endl;
@@ -449,7 +449,7 @@ void Servicio::exportarServiciosPorPaciente(const std::string& nombrePaciente) {
         std::getline(stream, fecha, ','); 
         std::getline(stream, descripcion); 
 
-        // Comparar el nombre del médico con el nombre introducido
+        // Comparar el nombre del medico con el nombre introducido
         if (paciente == nombrePaciente) {
             encontrado = true;
             archivoSalida << linea << std::endl; // Escribir en el archivo de salida

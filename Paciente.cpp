@@ -34,14 +34,14 @@ void Paciente::crearPacientesCSV() {
             std::ofstream archivoSalida("Pacientes.csv", std::ios::app);
             if (archivoSalida.is_open()) {
                 archivoSalida << "ID,Nombre,Fecha de Ingreso\n";
-                std::cout << "\n Encabezados escritos en el archivo vacío.\n";
+                std::cout << "\n Encabezados escritos en el archivo vacio.\n";
             }
             else {
                 std::cout << "\n No se pudo abrir el archivo para agregar encabezados.\n";
             }
         }
         else {
-            std::cout << "\n El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
+            std::cout << "\n El archivo ya existe y no esta vacio, no se escribieron encabezados.\n";
         }
     }
 }
@@ -119,7 +119,7 @@ bool Paciente::esFechaValida(const std::string& fecha) {
     std::istringstream fechaStream(fecha);
     fechaStream >> anio >> separador1 >> mes >> separador2 >> dia;
 
-    // Verificar que se hayan leído correctamente los separadores
+    // Verificar que se hayan leido correctamente los separadores
     if (separador1 != '-' || separador2 != '-') {
         return false;
     }
@@ -129,21 +129,21 @@ bool Paciente::esFechaValida(const std::string& fecha) {
         return false;
     }
 
-    // Validar el rango de días según el mes
+    // Validar el rango de dias segun el mes
     switch (mes) {
-    case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 días
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 dias
         return (dia >= 1 && dia <= 31);
-    case 4: case 6: case 9: case 11: // Meses con 30 días
+    case 4: case 6: case 9: case 11: // Meses con 30 dias
         return (dia >= 1 && dia <= 30);
     case 2: // Febrero
         if (esAnioBisiesto(anio)) {
-            return (dia >= 1 && dia <= 29); // 29 días en año bisiesto
+            return (dia >= 1 && dia <= 29); // 29 dias en año bisiesto
         }
         else {
-            return (dia >= 1 && dia <= 28); // 28 días en año no bisiesto
+            return (dia >= 1 && dia <= 28); // 28 dias en año no bisiesto
         }
     default:
-        return false; // No debería llegar aquí
+        return false; // No deberia llegar aqui
     }
 }
 
@@ -151,12 +151,12 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
     try {
         // Validar los datos de entrada
         if (nombre.empty()) {
-            std::cout << "\n Error: El nombre no puede estar vacío.\n";
+            std::cout << "\n Error: El nombre no puede estar vacio.\n";
             return;
         }
 
         if (fechaIngreso.empty()) {
-            std::cout << "\n Error: La fecha de ingreso no puede estar vacía.\n";
+            std::cout << "\n Error: La fecha de ingreso no puede estar vacia.\n";
             return;
         }
 
@@ -167,9 +167,9 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
             return;
         }
 
-        // Validar que la fecha cumpla con las características (Año bisiesto, día 31 en meses que corresponde...)
+        // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
         if (!esFechaValida(fechaIngreso)) {
-            std::cout << "\n Error: La fecha de ingreso no es válida.\n";
+            std::cout << "\n Error: La fecha de ingreso no es valida.\n";
             return;
         }
 
@@ -184,8 +184,9 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
             return;
         }
 
-        // Guardar el paciente en CSV y agregarlo al vector solo si se guardó correctamente
+        // Guardar el paciente en CSV y agregarlo al vector solo si se guardo correctamente
         if (guardarPacienteEnCSV(*nuevoPaciente)) {
+           // pacientes.push_back(std::make_unique<Paciente>(nuevoId, nombre, fechaIngreso));
             pacientes.emplace_back(std::move(nuevoPaciente));
             std::cout << "\n Paciente agregado correctamente con ID: " << nuevoId << "\n";
         }
@@ -198,16 +199,16 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
             [](const std::unique_ptr<Paciente>& ptr) { return ptr == nullptr; }), pacientes.end());
     }
     catch (const std::exception& e) {
-        std::cout << "\n Se produjo una excepción: " << e.what() << "\n";
+        std::cout << "\n Se produjo una excepcion: " << e.what() << "\n";
     }
     catch (...) {
-        std::cout << "\n Se produjo una excepción desconocida.\n";
+        std::cout << "\n Se produjo una excepcion desconocida.\n";
     }
 }
 
 
 void Paciente::buscarPacientePorNombre(const std::string& nombreBuscado) {
-    buscarPaciente(nombreBuscado); // Llamar al método de búsqueda
+    buscarPaciente(nombreBuscado); // Llamar al metodo de busqueda
 }
 
 void Paciente::eliminarPaciente(const std::string& nombreBuscado) {
@@ -236,7 +237,7 @@ void Paciente::eliminarPaciente(const std::string& nombreBuscado) {
         }
     }
 
-    archivo.close(); // Cerrar el archivo después de leer
+    archivo.close(); // Cerrar el archivo despues de leer
 
     if (encontrado) {
         std::ofstream archivoSalida("Pacientes.csv");
@@ -283,7 +284,7 @@ void Paciente::modificarNombrePaciente(const std::string& nombreBuscado, const s
         lineas.push_back(id + "," + nombre + "," + fechaIngreso);
     }
 
-    archivo.close(); // Cerrar el archivo después de leer
+    archivo.close(); // Cerrar el archivo despues de leer
 
     if (encontrado) {
         std::ofstream archivoSalida("Pacientes.csv");
@@ -391,7 +392,7 @@ void Paciente::exportarPacientes() {
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {
-        archivoTXT << linea << std::endl; // Escribir cada línea del CSV en el archivo TXT
+        archivoTXT << linea << std::endl; // Escribir cada linea del CSV en el archivo TXT
     }
 
     std::cout << "Contenido exportado a: " << nombreTXT << std::endl;
@@ -419,12 +420,12 @@ void Paciente::buscarPacientesPorFechaIngreso(const std::string& fechaInicio, co
         std::getline(stream, fechaIngreso, ','); 
 
         if (fechaInicio.empty()) {
-            std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
+            std::cout << "\n Error: La fecha de inicio no puede estar vacia.\n";
             return;
         }
 
         if (fechaFin.empty()) {
-            std::cout << "\n Error: La fecha de inicio no puede estar vacía.\n";
+            std::cout << "\n Error: La fecha de inicio no puede estar vacia.\n";
             return;
         }
 
@@ -441,13 +442,13 @@ void Paciente::buscarPacientesPorFechaIngreso(const std::string& fechaInicio, co
         }
         // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
         if (!esFechaValida(fechaInicio)) {
-            std::cout << "\n Error: La fecha de inicio no es válida.\n";
+            std::cout << "\n Error: La fecha de inicio no es valida.\n";
             return;
         }
 
         // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
         if (!esFechaValida(fechaFin)) {
-            std::cout << "\n Error: La fecha fin no es válida.\n";
+            std::cout << "\n Error: La fecha fin no es valida.\n";
             return;
         }
 

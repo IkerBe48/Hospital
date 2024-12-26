@@ -9,7 +9,7 @@
 
 class Paciente {
 public:
-    static std::vector<std::unique_ptr<Paciente>> pacientes;  // Almacena los médicos
+    static std::vector<std::unique_ptr<Paciente>> pacientes;  // Almacena los pacientes
 
     Paciente(int id, const std::string& nombre, const std::string& fechaIngreso);
     std::string getNombre() const { return nombre; }

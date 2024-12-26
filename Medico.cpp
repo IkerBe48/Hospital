@@ -8,7 +8,7 @@
 #include <sstream>
 #include <filesystem>
 
-std::vector<std::unique_ptr<Medico>> Medico::medicos; // Inicializar el vector de médicos
+std::vector<std::unique_ptr<Medico>> Medico::medicos; // Inicializar el vector de medicos
 
 Medico::Medico(int id, const std::string& nombre, const std::string& especialidad)
     : id(id), nombre(nombre), especialidad(especialidad) {
@@ -33,7 +33,7 @@ void Medico::crearMedicosCSV() {
             std::ofstream archivoSalida("Medicos.csv", std::ios::app);
             if (archivoSalida.is_open()) {
                 archivoSalida << "ID,Nombre,Especialidad\n";
-                std::cout << "\n Encabezados escritos en el archivo vacío.\n";
+                std::cout << "\n Encabezados escritos en el archivo vacio.\n";
                 archivoSalida.close();
             }
             else {
@@ -41,7 +41,7 @@ void Medico::crearMedicosCSV() {
             }
         }
         else {
-            std::cout << "\n El archivo ya existe y no está vacío, no se escribieron encabezados.\n";
+            std::cout << "\n El archivo ya existe y no esta vacio, no se escribieron encabezados.\n";
         }
     }
 
@@ -342,7 +342,7 @@ void Medico::exportarMedicos() {
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {
-        archivoTXT << linea << std::endl; // Escribir cada línea del CSV en el archivo TXT
+        archivoTXT << linea << std::endl; // Escribir cada linea del CSV en el archivo TXT
     }
 
     std::cout << "Contenido exportado a: " << nombreTXT << std::endl;
