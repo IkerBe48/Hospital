@@ -762,6 +762,14 @@ void Cita::interfazCitas() {
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
+        // Control de error para verificar que la entrada es un número
+        while (std::cin.fail() || opcion < 1 || opcion > 8) {
+            std::cin.clear(); // Limpiar el estado de error
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorar la entrada incorrecta
+            std::cout << "Entrada no valida. Introduce un numero entre 1 y 8: ";
+            std::cin >> opcion;
+        }
+
         switch (opcion) {
         case 1: {
             std::string nombrePaciente, nombreMedico, fecha;

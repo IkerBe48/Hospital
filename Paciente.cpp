@@ -141,7 +141,7 @@ void Paciente::buscarPaciente() {
         std::getline(stream, nombre, ',');
         std::getline(stream, fechaIngreso, ',');
 
-        // Comprobamos si coincide con el criterio de búsqueda
+        // Se comprueba si coincide con el criterio de búsqueda
         if (nombre == criterioBuscado || id == criterioBuscado || fechaIngreso == criterioBuscado) {
             encontrado = true;
             std::cout << "\n Paciente encontrado: " << linea << std::endl;
