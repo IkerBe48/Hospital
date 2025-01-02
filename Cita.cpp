@@ -414,6 +414,14 @@ void Cita::buscarCitasPorFechaOUrgencia() {
         std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
+
+    int opcion;
+    std::cout << "Seleccione el criterio de búsqueda:\n";
+    std::cout << "1. Por rango de fechas\n";
+    std::cout << "2. Por urgencia\n";
+    std::cout << "Opción: ";
+    std::cin >> opcion;
+
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string id, paciente,medico, fecha;
