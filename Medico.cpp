@@ -10,8 +10,8 @@
 
 std::vector<std::unique_ptr<Medico>> Medico::medicos; // Inicializar el vector de medicos
 
-Medico::Medico(int id, const std::string& nombre, const std::string& especialidad)
-    : id(id), nombre(nombre), especialidad(especialidad) {
+Medico::Medico(int id, const std::string& nombre, const std::string& especialidad, const std::string& disponible)
+    : id(id), nombre(nombre), especialidad(especialidad), disponible (disponible){
 }
 
 void Medico::crearMedicosCSV() {
@@ -20,7 +20,7 @@ void Medico::crearMedicosCSV() {
     if (!archivo) {
         std::ofstream archivoSalida("Medicos.csv");
         if (archivoSalida.is_open()) {
-            archivoSalida << "ID,Nombre,Especialidad\n"; 
+            archivoSalida << "ID,Nombre,Especialidad,Disponible\n"; 
             std::cout << "\n Archivo creado y encabezados escritos.\n";
             archivoSalida.close();
         }
@@ -32,7 +32,7 @@ void Medico::crearMedicosCSV() {
         if (archivo.peek() == std::ifstream::traits_type::eof()) {
             std::ofstream archivoSalida("Medicos.csv", std::ios::app);
             if (archivoSalida.is_open()) {
-                archivoSalida << "ID,Nombre,Especialidad\n";
+                archivoSalida << "ID,Nombre,Especialidad,Disponible\n";
                 std::cout << "\n Encabezados escritos en el archivo vacio.\n";
                 archivoSalida.close();
             }
@@ -71,8 +71,8 @@ int Medico::obtenerMaxIdMedicos() {
 bool Medico::guardarMedicoEnCSV(const Medico& medico) {
     std::ofstream archivo("Medicos.csv", std::ios::app);
     if (archivo.is_open()) {
-        archivo << medico.id << "," << medico.nombre << "," << medico.especialidad << "\n";
-        std::cout << "\n\n Datos del Medico escritos: | " << medico.id << " | " << medico.nombre << " | " << medico.especialidad << " |\n";
+        archivo << medico.id << "," << medico.nombre << "," << medico.especialidad << "," << medico.disponible << "\n";
+        std::cout << "\n\n Datos del Medico escritos: | " << medico.id << " | " << medico.nombre << " | " << medico.especialidad << "," << medico.disponible << " |\n";
         archivo.close();
         return true;
     }
@@ -112,11 +112,11 @@ void Medico::buscarMedico(const std::string& nombreBuscado) {
     archivo.close();
 }
 
-void Medico::agregarMedico(const std::string& nombre, const std::string& especialidad) {
+void Medico::agregarMedico(const std::string& nombre, const std::string& especialidad, const std::string& disponible) {
     crearMedicosCSV();
 
     int nuevoId = obtenerMaxIdMedicos() + 1;
-    auto nuevoMedico = std::make_unique<Medico>(nuevoId, nombre, especialidad);
+    auto nuevoMedico = std::make_unique<Medico>(nuevoId, nombre, especialidad, disponible);
     if (guardarMedicoEnCSV(*nuevoMedico)) {
         medicos.emplace_back(std::move(nuevoMedico));
         std::cout << "\n\n Medico agregado correctamente con ID: " << nuevoId << "\n";
@@ -189,18 +189,19 @@ void Medico::modificarNombreMedico(const std::string& nombreBuscado, const std::
 
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
-        std::string id, nombre, especialidad;
+        std::string id, nombre, especialidad, disponible;
 
         std::getline(stream, id, ',');
         std::getline(stream, nombre, ',');
-        std::getline(stream, especialidad);
+        std::getline(stream, especialidad, ',');
+        std::getline(stream, disponible);
 
         if (nombre == nombreBuscado) {
             nombre = nuevoNombre;
             encontrado = true;
         }
 
-        lineas.push_back(id + "," + nombre + "," + especialidad);
+        lineas.push_back(id + "," + nombre + "," + especialidad + "," + disponible);
     }
 
     archivo.close();
@@ -235,11 +236,12 @@ void Medico::buscarMedicoPorEspecialidad(const std::string& especialidadbuscada)
 
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
-        std::string id, nombre, especialidad;
+        std::string id, nombre, especialidad, disponible;
 
         std::getline(stream, id, ',');
         std::getline(stream, nombre, ',');
         std::getline(stream, especialidad, ',');
+        std::getline(stream, disponible);
 
         if (especialidad == especialidadbuscada) {
             encontrado = true;
@@ -338,7 +340,7 @@ void Medico::exportarMedicos() {
     // Escribir encabezado
     archivoTXT << "Reporte de Medicos\n";
     archivoTXT << "=====================\n";
-    archivoTXT << "ID\tNombre\tEspecialidad\n"; 
+    archivoTXT << "ID\tNombre\tEspecialidad\tDisponible\n"; 
 
     std::string linea;
     while (std::getline(archivoCSV, linea)) {
@@ -378,13 +380,23 @@ void Medico::interfazMedicos() {
 
         switch (opcion) {
         case 1: {
-            std::string nombre, especialidad;
+            std::string nombre, especialidad, disponible;
             std::cin.ignore();
             std::cout << "Ingrese nombre del medico: ";
             std::getline(std::cin, nombre);
             std::cout << "Ingrese la especialidad del medico: ";
             std::getline(std::cin, especialidad);
-            Medico::agregarMedico(nombre, especialidad);
+            std::cout << "Ingrese la disponibilidad del medico (S/N): ";
+            std::cin >> disponible;
+
+            // Convertir la entrada de disponibilidad a booleano
+            /*if (disponible = 'S' | disponible = 's') {
+                disponible = 'S';
+            }
+            else {
+                disponible = 'N';
+            }*/
+            Medico::agregarMedico(nombre, especialidad, disponible);
             break;
         }
         case 2: {

@@ -209,7 +209,7 @@ void Cita::agregarCita(const std::string& nombrePaciente, const std::string& nom
 
     int nuevoId = obtenerMaxIdCitas() + 1;
     auto paciente = std::make_unique<Paciente>(nuevoId, nombrePaciente, "");
-    auto medico = std::make_unique<Medico>(nuevoId, nombreMedico, "");
+    auto medico = std::make_unique<Medico>(nuevoId, nombreMedico, "", "");
     auto nuevaCita = std::make_unique<Cita>(nuevoId, std::move(paciente), std::move(medico), fecha, urgencia);
 
     if (guardarCitaEnCSV(*nuevaCita)) {

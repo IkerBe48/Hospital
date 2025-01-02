@@ -482,10 +482,10 @@ void Servicio::interfazServicios() {
         std::cin >> opcion;
 
         // Control de error para verificar que la entrada es un número
-        while (std::cin.fail() || opcion < 1 || opcion > 8) {
+        while (std::cin.fail() || opcion < 1 || opcion > 7) {
             std::cin.clear(); // Limpiar el estado de error
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorar la entrada incorrecta
-            std::cout << "Entrada no valida. Introduce un numero entre 1 y 8: ";
+            std::cout << "Entrada no valida. Introduce un numero entre 1 y 7: ";
             std::cin >> opcion;
         }
 
