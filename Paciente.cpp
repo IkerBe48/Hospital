@@ -78,24 +78,71 @@ bool Paciente::guardarPacienteEnCSV(const Paciente& paciente) {
     }
 }
 
-void Paciente::buscarPaciente(const std::string& nombreBuscado) {
+void Paciente::buscarPaciente() {
     std::ifstream archivo("Pacientes.csv");
     std::string linea;
     bool encontrado = false;
+
+    // Validar el formato de la fecha (YYYY-MM-DD)
+    std::regex fechaRegex(R"(^\d{4}-\d{2}-\d{2}$)");
 
     if (!archivo.is_open()) {
         std::cerr << "\n Error al abrir el archivo." << std::endl;
         return;
     }
 
+    int opcion;
+    std::cout << "Seleccione el campo por el que desea buscar:\n";
+    std::cout << "1. Buscar por Nombre\n";
+    std::cout << "2. Buscar por ID\n";
+    std::cout << "3. Buscar por Fecha de Ingreso\n";
+    std::cout << "Opcion: ";
+    std::cin >> opcion;
+
+    std::string criterioBuscado;
+    switch (opcion) {
+    case 1:
+        std::cout << "Ingrese el nombre a buscar: ";
+        std::cin.ignore(); // Limpiar el buffer
+        std::getline(std::cin, criterioBuscado);
+        break;
+    case 2:
+        std::cout << "Ingrese el ID a buscar: ";
+        std::cin.ignore(); // Limpiar el buffer
+        std::getline(std::cin, criterioBuscado);
+        break;
+    case 3:
+        std::cout << "Ingrese la fecha de ingreso a buscar (YYYY-MM-DD): ";
+        std::cin.ignore(); // Limpiar el buffer
+        std::getline(std::cin, criterioBuscado);
+
+        if (!std::regex_match(criterioBuscado, fechaRegex)) {
+            std::cout << "\n Error: La fecha de ingreso debe estar en el formato YYYY-MM-DD.\n";
+            return;
+        }
+
+        // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
+        if (!esFechaValida(criterioBuscado)) {
+            std::cout << "\n Error: La fecha de ingreso no es valida.\n";
+            return;
+        }
+        break;
+    default:
+        std::cout << "Opcion no valida." << std::endl;
+        archivo.close();
+        return;
+    }
+
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
-        std::string id, nombre;
+        std::string id, nombre, fechaIngreso;
 
-        std::getline(stream, id, ','); 
-        std::getline(stream, nombre, ','); 
+        std::getline(stream, id, ',');
+        std::getline(stream, nombre, ',');
+        std::getline(stream, fechaIngreso, ',');
 
-        if (nombre == nombreBuscado) {
+        // Comprobamos si coincide con el criterio de búsqueda
+        if (nombre == criterioBuscado || id == criterioBuscado || fechaIngreso == criterioBuscado) {
             encontrado = true;
             std::cout << "\n Paciente encontrado: " << linea << std::endl;
         }
@@ -207,10 +254,10 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
 }
 
 
-void Paciente::buscarPacientePorNombre(const std::string& nombreBuscado) {
+/*void Paciente::buscarPacientePorNombre(const std::string& nombreBuscado) {
     buscarPaciente(nombreBuscado); // Llamar al metodo de busqueda
 }
-
+*/
 void Paciente::eliminarPaciente(const std::string& nombreBuscado) {
     std::ifstream archivo("Pacientes.csv");
     std::vector<std::string> lineas;
@@ -471,7 +518,7 @@ void Paciente::interfazPacientes() {
     while (true) {
         std::cout << "------Menu------\n";
         std::cout << "1. Agregar paciente\n";
-        std::cout << "2. Buscar paciente por nombre\n";
+        std::cout << "2. Buscar paciente\n";
         std::cout << "3. Eliminar paciente por nombre\n";
         std::cout << "4. Modificar nombre de paciente\n";
         std::cout << "5. Generar BackUp de Pacientes\n";
@@ -480,6 +527,14 @@ void Paciente::interfazPacientes() {
         std::cout << "8. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
+
+        // Control de error para verificar que la entrada es un número
+        while (std::cin.fail() || opcion < 1 || opcion > 8 ) {
+            std::cin.clear(); // Limpiar el estado de error
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorar la entrada incorrecta
+            std::cout << "Entrada no valida. Introduce un numero entre 1 y 8: ";
+            std::cin >> opcion;
+        }
 
         switch (opcion) {
         case 1: {
@@ -493,11 +548,11 @@ void Paciente::interfazPacientes() {
             break;
         }
         case 2: {
-            std::string nombreBuscado;
+           /* std::string nombreBuscado;
             std::cin.ignore();
             std::cout << "Ingrese el nombre del paciente a buscar: ";
-            std::getline(std::cin, nombreBuscado);
-            Paciente::buscarPacientePorNombre(nombreBuscado);
+            std::getline(std::cin, nombreBuscado);*/
+            Paciente::buscarPaciente();
             break;
         }
         case 3: {

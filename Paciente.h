@@ -20,11 +20,11 @@ public:
     // Métodos de Pacientes
     static void crearPacientesCSV();
     static bool guardarPacienteEnCSV(const Paciente& paciente);
-    static void buscarPaciente(const std::string& nombreBuscado);
+    static void buscarPaciente();
 
     static void agregarPaciente(const std::string& nombre, const std::string& fechaIngreso);
     static int obtenerMaxId();
-    static void buscarPacientePorNombre(const std::string& nombreBuscado);
+    //static void buscarPacientePorNombre(const std::string& nombreBuscado);
     static void eliminarPaciente(const std::string& nombreBuscado);
     static void modificarNombrePaciente(const std::string& nombreBuscado, const std::string& nuevoNombre);
 
