@@ -416,32 +416,21 @@ void Cita::buscarCitasPorFechaOUrgencia() {
     }
 
     int opcion;
-    std::cout << "Seleccione el criterio de búsqueda:\n";
+    std::cout << "Seleccione el criterio de busqueda:\n";
     std::cout << "1. Por rango de fechas\n";
     std::cout << "2. Por urgencia\n";
-    std::cout << "Opción: ";
+    std::cout << "Opcion: ";
     std::cin >> opcion;
 
-    while (std::getline(archivo, linea)) {
-        std::istringstream stream(linea);
-        std::string id, paciente,medico, fecha;
+    if (opcion == 1) {
+        std::string fechaInicio, fechaFin;
 
-        std::getline(stream, id, ','); 
-        std::getline(stream, paciente, ','); 
-        std::getline(stream, medico, ','); 
-        std::getline(stream, fecha, ','); 
+        std::cout << "Ingrese la fecha de inicio (YYYY-MM-DD): ";
+        std::cin >> fechaInicio;
+        std::cout << "Ingrese la fecha de fin (YYYY-MM-DD): ";
+        std::cin >> fechaFin;
 
-        if (fechaInicio.empty()) {
-            std::cout << "\n Error: La fecha de inicio no puede estar vacia.\n";
-            return;
-        }
-
-        if (fechaFin.empty()) {
-            std::cout << "\n Error: La fecha de inicio no puede estar vacia.\n";
-            return;
-        }
-
-        // Validar el formato de la fecha (DD-MM-YYYY)
+        // Validar el formato de la fecha (YYYY-MM-DD)
         std::regex fechaRegex(R"(^\d{4}-\d{2}-\d{2}$)");
         if (!std::regex_match(fechaInicio, fechaRegex)) {
             std::cout << "\n Error: La fecha de inicio debe estar en el formato YYYY-MM-DD.\n";
@@ -452,29 +441,85 @@ void Cita::buscarCitasPorFechaOUrgencia() {
             std::cout << "\n Error: La fecha fin debe estar en el formato YYYY-MM-DD.\n";
             return;
         }
-        // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
+
+        // Validar que las fechas sean válidas
         if (!esFechaValida(fechaInicio)) {
-            std::cout << "\n Error: La fecha de inicio no es valida.\n";
+            std::cout << "\n Error: La fecha de inicio no es válida.\n";
             return;
         }
 
-        // Validar que la fecha cumpla con las caracteristicas (Año bisiesto, dia 31 en meses que corresponde...)
         if (!esFechaValida(fechaFin)) {
-            std::cout << "\n Error: La fecha fin no es valida.\n";
+            std::cout << "\n Error: La fecha fin no es válida.\n";
             return;
         }
 
-        // Comparar la fecha de ingreso con el rango
-        if (fecha >= fechaInicio && fecha <= fechaFin) {
-            encontrado = true;
-            std::cout << "\nCita encontrada: " << linea << std::endl;
+        while (std::getline(archivo, linea)) {
+            std::istringstream stream(linea);
+            std::string id, paciente, medico, fecha, urgencia;
+
+            std::getline(stream, id, ',');
+            std::getline(stream, paciente, ',');
+            std::getline(stream, medico, ',');
+            std::getline(stream, fecha, ',');
+            std::getline(stream, urgencia);
+
+            // Comparar la fecha de ingreso con el rango
+            if (fecha >= fechaInicio && fecha <= fechaFin) {
+                encontrado = true;
+                std::cout << "\nCita encontrada: " << linea << std::endl;
+            }
         }
+    }
+    else if (opcion == 2) {
+        std::string urgenciaBuscada;
+        std::cout << "Ingrese el nivel de urgencia (De 1 a 3. 3 como la mas urgente): ";
+        std::cin.ignore(); // Limpiar el buffer
+        std::getline(std::cin, urgenciaBuscada);
+        while (true) {
+            std::cout << "Ingrese urgencia (1: baja, 2: media, 3: alta): ";
+            std::cin >> urgenciaBuscada;
+
+            // Verificar si la entrada es valida
+            if (std::cin.fail() || urgenciaBuscada < "1" || urgenciaBuscada > "3") {
+                std::cin.clear(); // Limpiar el estado de error
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorar la entrada incorrecta
+                std::cout << "Urgencia invalida. Por favor, ingrese un numero del 1 al 3." << std::endl;
+            }
+            else {
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Limpiar el buffer
+                break; // Salir del bucle si la entrada es valida
+            }
+        }
+
+        while (std::getline(archivo, linea)) {
+            std::istringstream stream(linea);
+            std::string id, paciente, medico, fecha, urgencia;
+
+            std::getline(stream, id, ',');
+            std::getline(stream, paciente, ',');
+            std::getline(stream, medico, ',');
+            std::getline(stream, fecha, ',');
+            std::getline(stream, urgencia);
+
+            // Comparar la urgencia con la urgencia buscada
+            if (urgencia == urgenciaBuscada) {
+                encontrado = true;
+                std::cout << "\nCita encontrada: " << linea << std::endl;
+            }
+        }
+    }
+    else {
+        std::cout << "Opcion no válida." << std::endl;
     }
 
     if (!encontrado) {
-        std::cout << "\n No se encontraron citas en el rango de fechas." << std::endl;
+        if (opcion == 1) {
+            std::cout << "\n No se encontraron citas en el rango de fechas." << std::endl;
+        }
+        else if (opcion == 2) {
+            std::cout << "\n No se encontraron citas con la urgencia especificada." << std::endl;
+        }
     }
-
     archivo.close();
 }
 
@@ -817,7 +862,7 @@ void Cita::interfazCitas() {
     while (true) {
         std::cout << "------Menu------\n";
         std::cout << "1. Agregar Cita\n";
-        std::cout << "2. Mostrar Citas por fecha\n";
+        std::cout << "2. Mostrar Citas por fechas o urgencia\n";
         std::cout << "3. Eliminar Cita por Paciente\n";
         std::cout << "4. Modificar fecha de Cita\n";
         std::cout << "5. Generar BackUp de Citas\n";
