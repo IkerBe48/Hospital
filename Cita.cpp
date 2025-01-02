@@ -405,7 +405,7 @@ void Cita::modificarFechaCita(const std::string& nombreBuscado, const std::strin
     }
 }
 
-void Cita::buscarCitasPorFecha(const std::string& fechaInicio, const std::string& fechaFin) {
+void Cita::buscarCitasPorFechaOUrgencia() {
     std::ifstream archivo("Citas.csv");
     std::string linea;
     bool encontrado = false;
@@ -859,13 +859,13 @@ void Cita::interfazCitas() {
             break;
         }
         case 2: {
-            std::string fechaInicio, fechaFin;
+            /*std::string fechaInicio, fechaFin;
             std::cin.ignore();
             std::cout << "Ingrese la fecha inicio ";
             std::getline(std::cin, fechaInicio);
             std::cout << "Ingrese la fecha fin ";
-            std::getline(std::cin, fechaFin);
-            Cita::buscarCitasPorFecha(fechaInicio, fechaFin);
+            std::getline(std::cin, fechaFin);*/
+            Cita::buscarCitasPorFechaOUrgencia();
             break;
         }
         case 3: {

@@ -30,7 +30,7 @@ public:
     static void exportarCitas();
     static void eliminarCita(const std::string& nombreBuscado);
     static void modificarFechaCita(const std::string& nombreBuscado, const std::string& nuevaFecha);
-    static void buscarCitasPorFecha(const std::string& fechaInicio, const std::string& fechaFin);
+    static void buscarCitasPorFechaOUrgencia();
 
     static void exportarCitasPorFecha(const std::string& fechaInicio, const std::string& fechaFin);
     static void exportarCitasPorMedicoOEspecialidad();
