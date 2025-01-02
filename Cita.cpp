@@ -648,7 +648,7 @@ void Cita::exportarCitasPorFecha(const std::string& fechaInicio, const std::stri
     archivoSalida.close(); // Cerrar el archivo de salida
 }
 
-void Cita::exportarCitasPorMedico(const std::string& nombreMedico) {
+void Cita::exportarCitasPorMedicoOEspecialidad() {
     std::ifstream archivo("Citas.csv");
     std::ofstream archivoSalida("Citas_de_" + nombreMedico + ".txt");
     std::string linea;
@@ -756,17 +756,17 @@ void Cita::interfazCitas() {
         std::cout << "5. Generar BackUp de Citas\n";
         std::cout << "6. Generar Fichero de Citas\n";
         std::cout << "7. Generar Fichero de Citas en rango de fechas\n";
-        std::cout << "8. Generar Fichero de Citas por Medico\n";
+        std::cout << "8. Generar Fichero de Citas por Medico o por Especialidad\n";
         std::cout << "9. Generar Fichero de Pacientes graves\n";
         std::cout << "10. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
         // Control de error para verificar que la entrada es un número
-        while (std::cin.fail() || opcion < 1 || opcion > 8) {
+        while (std::cin.fail() || opcion < 1 || opcion > 10) {
             std::cin.clear(); // Limpiar el estado de error
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorar la entrada incorrecta
-            std::cout << "Entrada no valida. Introduce un numero entre 1 y 8: ";
+            std::cout << "Entrada no valida. Introduce un numero entre 1 y 10: ";
             std::cin >> opcion;
         }
 
@@ -844,11 +844,11 @@ void Cita::interfazCitas() {
             break;
         }
         case 8: {
-            std::string nombreMedico;
+            /*std::string nombreMedico;
             std::cin.ignore();
             std::cout << "Ingrese el nombre del Medico ";
-            std::getline(std::cin, nombreMedico);
-            Cita::exportarCitasPorMedico(nombreMedico);
+            std::getline(std::cin, nombreMedico);*/
+            Cita::exportarCitasPorMedicoOEspecialidad();
             break;
         }
         case 9: {
