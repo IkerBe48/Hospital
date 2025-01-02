@@ -9,6 +9,7 @@
 #include <sstream> // Para usar std::istringstream
 #include <filesystem>
 #include <regex>
+#include <unordered_set>
 
 std::vector<std::unique_ptr<Cita>> Cita::citas;
 
@@ -649,51 +650,109 @@ void Cita::exportarCitasPorFecha(const std::string& fechaInicio, const std::stri
 }
 
 void Cita::exportarCitasPorMedicoOEspecialidad() {
-    std::ifstream archivo("Citas.csv");
-    std::ofstream archivoSalida("Citas_de_" + nombreMedico + ".txt");
+    std::ifstream archivoCitas("Citas.csv");
     std::string linea;
     bool encontrado = false;
 
-    if (!archivo.is_open()) {
-        std::cerr << "\n Error al abrir el archivo." << std::endl;
+    if (!archivoCitas.is_open()) {
+        std::cerr << "\n Error al abrir el archivo de citas." << std::endl;
         return;
     }
 
+    int opcion;
+    std::cout << "Seleccione el criterio de búsqueda:\n";
+    std::cout << "1. Por Médico\n";
+    std::cout << "2. Por Especialidad\n";
+    std::cout << "Opción: ";
+    std::cin >> opcion;
+
+    std::string criterioBuscado;
+    std::unordered_set<std::string> medicosEncontrados; // Para almacenar médicos por especialidad
+
+    switch (opcion) {
+    case 1:
+        std::cout << "Ingrese el nombre del medico: ";
+        std::cin.ignore(); // Limpiar el buffer
+        std::getline(std::cin, criterioBuscado);
+        break;
+    case 2: {
+        std::cout << "Ingrese la especialidad: ";
+        std::cin.ignore(); // Limpiar el buffer
+        std::getline(std::cin, criterioBuscado);
+
+        // Buscar médicos por especialidad en Medicos.csv
+        std::ifstream archivoMedicos("Medicos.csv");
+        if (!archivoMedicos.is_open()) {
+            std::cerr << "\n Error al abrir el archivo de médicos." << std::endl;
+            return;
+        }
+
+        std::string ID, nombre, Especialidad;
+        while (std::getline(archivoMedicos, linea)) {
+            std::istringstream stream(linea);
+            std::getline(stream, ID, ',');
+            std::getline(stream, nombre, ',');
+            std::getline(stream, Especialidad); // Leer el campo de especialidad
+
+            // Si la especialidad coincide, agregar el médico al conjunto
+            if (Especialidad == criterioBuscado) {
+                medicosEncontrados.insert(nombre);
+            }
+        }
+        archivoMedicos.close();
+        // Mostrar los médicos encontrados
+        std::cout << "\nMedicos encontrados con la especialidad '" << criterioBuscado << "':\n";
+        for (const auto& m : medicosEncontrados) {
+            std::cout << "- " << m << std::endl;
+        }
+        break;
+    }
+    default:
+        std::cout << "Opcion no válida." << std::endl;
+        archivoCitas.close();
+        return;
+    }
+
+    // Crear el archivo de salida
+    std::ofstream archivoSalida("Citas_de_" + criterioBuscado + ".txt");
     if (!archivoSalida.is_open()) {
         std::cerr << "\n Error al crear el archivo de salida." << std::endl;
         return;
     }
 
     // Escribir encabezado
-    archivoSalida << "Reporte de Citas para el Medico: " + nombreMedico + "\n";
+    archivoSalida << "Reporte de Citas para: " + criterioBuscado + "\n";
     archivoSalida << "=====================\n";
-    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n"; 
+    archivoSalida << "ID\tPaciente\tMedico\tFecha de entrada\tUrgencia\n";
 
-    while (std::getline(archivo, linea)) {
+    // Filtrar citas
+    while (std::getline(archivoCitas, linea)) {
         std::istringstream stream(linea);
         std::string id, paciente, medico, fecha, urgencia;
 
-        std::getline(stream, id, ','); 
+        // Leer los campos del archivo de citas
+        std::getline(stream, id, ',');
         std::getline(stream, paciente, ',');
-        std::getline(stream, medico, ','); 
-        std::getline(stream, fecha, ','); 
-        std::getline(stream, urgencia); 
+        std::getline(stream, medico, ',');
+        std::getline(stream, fecha, ',');
+        std::getline(stream, urgencia);
 
-        // Comparar el nombre del medico con el nombre introducido
-        if (medico == nombreMedico) {
+        // Comparar el nombre del médico o la especialidad con el criterio introducido
+        if ((opcion == 1 && medico == criterioBuscado) ||
+            (opcion == 2 && medicosEncontrados.find(medico) != medicosEncontrados.end())) {
             encontrado = true;
-            archivoSalida << linea << std::endl; // Escribir en el archivo de salida
+            archivoSalida << id << "\t" << paciente << "\t" << medico << "\t" << fecha << "\t" << urgencia << std::endl; // Escribir en el archivo de salida
         }
     }
 
     if (!encontrado) {
-        std::cout << "\n No se encontraron citas para el medico: " << nombreMedico << std::endl;
+        std::cout << "\n No se encontraron citas para: " << criterioBuscado << std::endl;
     }
     else {
-        std::cout << "\n Se ha generado el reporte con citas para el medico: " << nombreMedico << std::endl;
+        std::cout << "\n Se ha generado el reporte con citas para: " << criterioBuscado << std::endl;
     }
 
-    archivo.close();
+    archivoCitas.close();
     archivoSalida.close(); // Cerrar el archivo de salida
 }
 void Cita::exportarCitasCronicas() {
