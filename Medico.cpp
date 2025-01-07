@@ -82,7 +82,7 @@ bool Medico::guardarMedicoEnCSV(const Medico& medico) {
     }
 }
 
-void Medico::buscarMedico(const std::string& nombreBuscado) {
+void Medico::buscarMedico() {
     std::ifstream archivo("Medicos.csv");
     std::string linea;
     bool encontrado = false;
@@ -97,7 +97,7 @@ void Medico::buscarMedico(const std::string& nombreBuscado) {
     std::cout << "1. Nombre\n";
     std::cout << "2. Especialidad\n";
     std::cout << "3. Disponibilidad (S para disponible, N para no disponible)\n";
-    std::cout << "Opción: ";
+    std::cout << "Opcion: ";
     std::cin >> opcion;
 
     std::string criterioBuscado;
@@ -121,18 +121,22 @@ void Medico::buscarMedico(const std::string& nombreBuscado) {
         for (auto& c : disponibilidadBuscada) c = toupper(c);
         break;
     default:
-        std::cout << "Opción no válida." << std::endl;
+        std::cout << "Opcion no válida." << std::endl;
         archivo.close();
         return;
     }
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
-        std::string id, nombre;
+        std::string id, nombre, especialidad, disponible;
 
         std::getline(stream, id, ',');
         std::getline(stream, nombre, ',');
+        std::getline(stream, especialidad, ',');
+        std::getline(stream, disponible, ',');
 
-        if (nombre == nombreBuscado) {
+        if ((opcion == 1 && nombre == criterioBuscado) ||
+            (opcion == 2 && especialidad == criterioBuscado) ||
+            (opcion == 3 && disponible == disponibilidadBuscada)) {
             encontrado = true;
             std::cout << "\n\n Medico encontrado: " << linea << std::endl;
         }
@@ -393,7 +397,7 @@ void Medico::interfazMedicos() {
     while (true) {
         std::cout << "------Menu------\n";
         std::cout << "1. Agregar medico\n";
-        std::cout << "2. Buscar medico por nombre\n";
+        std::cout << "2. Buscar medico por nombre, especialidad o disponibilidad\n";
         //std::cout << "3. Buscar medico por especialidad\n";
         std::cout << "3. Eliminar medico por nombre\n";
         std::cout << "4. Modificar nombre de medico\n";
