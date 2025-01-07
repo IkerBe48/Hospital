@@ -119,6 +119,15 @@ void Medico::buscarMedico() {
         std::cin >> disponibilidadBuscada;
         // Convertir a mayúsculas para evitar problemas de entrada
         for (auto& c : disponibilidadBuscada) c = toupper(c);
+
+        // Validar la entrada
+        while (disponibilidadBuscada != "S" && disponibilidadBuscada != "N") {
+            std::cout << "Entrada no valida. Por favor, ingrese 'S' para disponible o 'N' para no disponible: ";
+            std::cin >> disponibilidadBuscada;
+
+            // Convertir a mayúsculas nuevamente
+            for (auto& c : disponibilidadBuscada) c = toupper(c);
+        }
         break;
     default:
         std::cout << "Opcion no válida." << std::endl;
