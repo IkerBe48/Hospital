@@ -125,10 +125,10 @@ void Medico::agregarMedico(const std::string& nombre, const std::string& especia
         std::cout << "\n Error al agregar el medico. Intente nuevamente.\n";
     }
 }
-
-void Medico::buscarMedicoPorNombre(const std::string& nombreBuscado) {
+/*void Medico::buscarMedicoPorNombre(const std::string& nombreBuscado) {
     buscarMedico(nombreBuscado);
-}
+}*/
+
 
 void Medico::eliminarMedico(const std::string& nombreBuscado) {
     std::ifstream archivo("Medicos.csv");
@@ -361,20 +361,20 @@ void Medico::interfazMedicos() {
         std::cout << "------Menu------\n";
         std::cout << "1. Agregar medico\n";
         std::cout << "2. Buscar medico por nombre\n";
-        std::cout << "3. Buscar medico por especialidad\n";
-        std::cout << "4. Eliminar medico por nombre\n";
-        std::cout << "5. Modificar nombre de medico\n";
-        std::cout << "6. Generar BackUp de Medicos\n";
-        std::cout << "7. Generar Fichero de Medicos\n";
-        std::cout << "8. Salir\n";
+        //std::cout << "3. Buscar medico por especialidad\n";
+        std::cout << "3. Eliminar medico por nombre\n";
+        std::cout << "4. Modificar nombre de medico\n";
+        std::cout << "5. Generar BackUp de Medicos\n";
+        std::cout << "6. Generar Fichero de Medicos\n";
+        std::cout << "7. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
 
         // Control de error para verificar que la entrada es un número
-        while (std::cin.fail() || opcion < 1 || opcion > 8) {
+        while (std::cin.fail() || opcion < 1 || opcion > 7) {
             std::cin.clear(); // Limpiar el estado de error
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorar la entrada incorrecta
-            std::cout << "Entrada no valida. Introduce un numero entre 1 y 8: ";
+            std::cout << "Entrada no valida. Introduce un numero entre 1 y 7: ";
             std::cin >> opcion;
         }
 
@@ -400,22 +400,25 @@ void Medico::interfazMedicos() {
             break;
         }
         case 2: {
-            std::string nombreBuscado;
+           /*std::string nombreBuscado;
             std::cin.ignore();
             std::cout << "Ingrese el nombre del medico a buscar: ";
             std::getline(std::cin, nombreBuscado);
-            Medico::buscarMedicoPorNombre(nombreBuscado);
+            Medico::buscarMedicoPorNombre(nombreBuscado);*/ 
+            Medico::buscarMedico();
+            break;
             break;
         }
-        case 3: {
+              /*case 3: {
             std::string especialidadbuscada;
             std::cin.ignore();
             std::cout << "Ingrese la especialidad a buscar: ";
             std::getline(std::cin, especialidadbuscada);
             Medico::buscarMedicoPorEspecialidad(especialidadbuscada);
             break;
-        }
-        case 4: {
+        }*/
+        
+        case 3: {
             std::string nombreBuscado;
             std::cin.ignore();
             std::cout << "Ingrese el nombre del medico a eliminar: ";
@@ -423,7 +426,7 @@ void Medico::interfazMedicos() {
             Medico::eliminarMedico(nombreBuscado);
             break;
         }
-        case 5: {
+        case 4: {
             std::string nombreBuscado, nuevoNombre;
             std::cin.ignore();
             std::cout << "Ingrese el nombre del medico a modificar: ";
@@ -433,13 +436,13 @@ void Medico::interfazMedicos() {
             Medico::modificarNombreMedico(nombreBuscado, nuevoNombre);
             break;
         }
-        case 6:
+        case 5:
             Medico::crearBackupMedicosCSV();
             break;
-        case 7:
+        case 6:
             Medico::exportarMedicos();
             break;
-        case 8:
+        case 7:
             return;
         default:
             std::cout << "\nOpcion invalida. Intente de nuevo.\n";
