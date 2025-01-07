@@ -100,6 +100,19 @@ void Medico::buscarMedico(const std::string& nombreBuscado) {
     std::cout << "Opción: ";
     std::cin >> opcion;
 
+
+    switch (opcion) {
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    default:
+        std::cout << "Opción no válida." << std::endl;
+        archivo.close();
+        return;
+    }
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string id, nombre;
