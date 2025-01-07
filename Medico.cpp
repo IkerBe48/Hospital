@@ -100,13 +100,25 @@ void Medico::buscarMedico(const std::string& nombreBuscado) {
     std::cout << "Opción: ";
     std::cin >> opcion;
 
+    std::string criterioBuscado;
+    std::string disponibilidadBuscada;
 
     switch (opcion) {
     case 1:
+        std::cout << "Ingrese el nombre a buscar: ";
+        std::cin.ignore(); // Limpiar el buffer
+        std::getline(std::cin, criterioBuscado);
         break;
     case 2:
+        std::cout << "Ingrese la especialidad a buscar: ";
+        std::cin.ignore(); // Limpiar el buffer
+        std::getline(std::cin, criterioBuscado);
         break;
     case 3:
+        std::cout << "Ingrese la disponibilidad a buscar (S para disponible, N para no disponible): ";
+        std::cin >> disponibilidadBuscada;
+        // Convertir a mayúsculas para evitar problemas de entrada
+        for (auto& c : disponibilidadBuscada) c = toupper(c);
         break;
     default:
         std::cout << "Opción no válida." << std::endl;
