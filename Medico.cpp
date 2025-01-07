@@ -92,6 +92,14 @@ void Medico::buscarMedico(const std::string& nombreBuscado) {
         return;
     }
 
+    int opcion;
+    std::cout << "Seleccione el campo por el que desea buscar:\n";
+    std::cout << "1. Nombre\n";
+    std::cout << "2. Especialidad\n";
+    std::cout << "3. Disponibilidad (S para disponible, N para no disponible)\n";
+    std::cout << "Opción: ";
+    std::cin >> opcion;
+
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string id, nombre;
