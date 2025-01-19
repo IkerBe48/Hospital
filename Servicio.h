@@ -29,7 +29,6 @@ public:
     static void buscarHistorialClinico(const std::string& nombrePaciente);
     static void modificarServiciosDescripcion(const std::string& nombreBuscado, const std::string& nuevaDesc);
 
-   // static void exportarServicioPorFecha(const std::string& fechaInicio, const std::string& fechaFin);
     static void exportarServiciosPorPaciente(const std::string& nombrePaciente);
 
     static void interfazServicios(); //Menu de Servicios

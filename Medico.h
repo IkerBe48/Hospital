@@ -19,7 +19,6 @@ public:
     static bool guardarMedicoEnCSV(const Medico& medico);
     static void buscarMedico();
     static void agregarMedico(const std::string& nombre, const std::string& especialidad, const std::string& disponible);
-    //static void buscarMedicoPorNombre(const std::string& nombreBuscado);
     static void eliminarMedico(const std::string& nombreBuscado);
     static void modificarNombreMedico(const std::string& nombreBuscado, const std::string& nuevoNombre);
     static void crearBackupMedicosCSV();

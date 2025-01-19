@@ -171,10 +171,6 @@ void Medico::agregarMedico(const std::string& nombre, const std::string& especia
         std::cout << "\n Error al agregar el medico. Intente nuevamente.\n";
     }
 }
-/*void Medico::buscarMedicoPorNombre(const std::string& nombreBuscado) {
-    buscarMedico(nombreBuscado);
-}*/
-
 
 void Medico::eliminarMedico(const std::string& nombreBuscado) {
     std::ifstream archivo("Medicos.csv");
@@ -407,7 +403,6 @@ void Medico::interfazMedicos() {
         std::cout << "------Menu------\n";
         std::cout << "1. Agregar medico\n";
         std::cout << "2. Buscar medico por nombre, especialidad o disponibilidad\n";
-        //std::cout << "3. Buscar medico por especialidad\n";
         std::cout << "3. Eliminar medico por nombre\n";
         std::cout << "4. Modificar nombre de medico\n";
         std::cout << "5. Generar BackUp de Medicos\n";
@@ -435,35 +430,15 @@ void Medico::interfazMedicos() {
             std::cout << "Ingrese la disponibilidad del medico (S/N): ";
             std::cin >> disponible;
 
-            // Convertir la entrada de disponibilidad a booleano
-            /*if (disponible = 'S' | disponible = 's') {
-                disponible = 'S';
-            }
-            else {
-                disponible = 'N';
-            }*/
             Medico::agregarMedico(nombre, especialidad, disponible);
             break;
         }
         case 2: {
-           /*std::string nombreBuscado;
-            std::cin.ignore();
-            std::cout << "Ingrese el nombre del medico a buscar: ";
-            std::getline(std::cin, nombreBuscado);
-            Medico::buscarMedicoPorNombre(nombreBuscado);*/ 
+         
             Medico::buscarMedico();
             break;
             break;
         }
-              /*case 3: {
-            std::string especialidadbuscada;
-            std::cin.ignore();
-            std::cout << "Ingrese la especialidad a buscar: ";
-            std::getline(std::cin, especialidadbuscada);
-            Medico::buscarMedicoPorEspecialidad(especialidadbuscada);
-            break;
-        }*/
-        
         case 3: {
             std::string nombreBuscado;
             std::cin.ignore();

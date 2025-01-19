@@ -233,7 +233,6 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
 
         // Guardar el paciente en CSV y agregarlo al vector solo si se guardo correctamente
         if (guardarPacienteEnCSV(*nuevoPaciente)) {
-           // pacientes.push_back(std::make_unique<Paciente>(nuevoId, nombre, fechaIngreso));
             pacientes.emplace_back(std::move(nuevoPaciente));
             std::cout << "\n Paciente agregado correctamente con ID: " << nuevoId << "\n";
         }
@@ -253,11 +252,6 @@ void Paciente::agregarPaciente(const std::string& nombre, const std::string& fec
     }
 }
 
-
-/*void Paciente::buscarPacientePorNombre(const std::string& nombreBuscado) {
-    buscarPaciente(nombreBuscado); // Llamar al metodo de busqueda
-}
-*/
 void Paciente::eliminarPaciente(const std::string& nombreBuscado) {
     std::ifstream archivo("Pacientes.csv");
     std::vector<std::string> lineas;
@@ -548,10 +542,6 @@ void Paciente::interfazPacientes() {
             break;
         }
         case 2: {
-           /* std::string nombreBuscado;
-            std::cin.ignore();
-            std::cout << "Ingrese el nombre del paciente a buscar: ";
-            std::getline(std::cin, nombreBuscado);*/
             Paciente::buscarPaciente();
             break;
         }

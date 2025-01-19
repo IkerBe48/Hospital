@@ -912,12 +912,7 @@ void Cita::interfazCitas() {
             break;
         }
         case 2: {
-            /*std::string fechaInicio, fechaFin;
-            std::cin.ignore();
-            std::cout << "Ingrese la fecha inicio ";
-            std::getline(std::cin, fechaInicio);
-            std::cout << "Ingrese la fecha fin ";
-            std::getline(std::cin, fechaFin);*/
+         
             Cita::buscarCitasPorFechaOUrgencia();
             break;
         }
@@ -956,10 +951,7 @@ void Cita::interfazCitas() {
             break;
         }
         case 8: {
-            /*std::string nombreMedico;
-            std::cin.ignore();
-            std::cout << "Ingrese el nombre del Medico ";
-            std::getline(std::cin, nombreMedico);*/
+          
             Cita::exportarCitasPorMedicoOEspecialidad();
             break;
         }
