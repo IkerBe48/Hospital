@@ -1,30 +1,6 @@
 ﻿#include "Hospital.h"
 
-// Inicializacion de vectores estaticos
-/*std::vector<std::unique_ptr<Paciente>> Paciente::pacientes;
-std::vector<std::unique_ptr<Medico>> Medico::medicos;
-std::vector<std::unique_ptr<Cita>> Cita::citas;
 
-// Implementacion de metodos de la clase Paciente
-Paciente::Paciente(const std::string& nombre, const std::string& fechaIngreso)
-    : nombre(nombre), fechaIngreso(fechaIngreso) {
-}
-
-// Implementacion de metodos de la clase Medico
-Medico::Medico(const std::string& nombre, const std::string& especialidad)
-    : nombre(nombre), especialidad(especialidad) {
-}
-
-// Implementacion de metodos de la clase Cita
-Cita::Cita(const std::string& nombrePaciente, const std::string& nombreMedico, const std::string& fecha, int urgencia)
-    : nombrePaciente(nombrePaciente), nombreMedico(nombreMedico), fecha(fecha), urgencia(urgencia) {
-}
-
-// Implementacion de metodos de la clase Servicio
-Servicio::Servicio(const std::string& nombrePaciente, const std::string& fecha, const std::string& descripcion)
-    : nombrePaciente(nombrePaciente), fecha(fecha), descripcion(descripcion) {
-}
-*/
 // Implementacion del menu del Hospital
 void Hospital::menu() {
     int opcion;

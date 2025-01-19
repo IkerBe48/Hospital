@@ -14,9 +14,6 @@ public:
     Paciente(int id, const std::string& nombre, const std::string& fechaIngreso);
     std::string getNombre() const { return nombre; }
 
-   // void agregarHistorial(std::string info);
-    //void mostrarInfo() const;
-
     // Métodos de Pacientes
     static void crearPacientesCSV();
     static bool guardarPacienteEnCSV(const Paciente& paciente);
@@ -24,7 +21,7 @@ public:
 
     static void agregarPaciente(const std::string& nombre, const std::string& fechaIngreso);
     static int obtenerMaxId();
-    //static void buscarPacientePorNombre(const std::string& nombreBuscado);
+
     static void eliminarPaciente(const std::string& nombreBuscado);
     static void modificarNombrePaciente(const std::string& nombreBuscado, const std::string& nuevoNombre);
 

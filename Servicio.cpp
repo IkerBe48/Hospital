@@ -471,12 +471,12 @@ void Servicio::interfazServicios() {
     int opcion;
     while (true) {
         std::cout << "------Menu------\n";
-        std::cout << "1. Agregar Servicio\n";
+        std::cout << "1. Agregar Servicio a paciente\n";
         std::cout << "2. Mostrar Historial Clinico por paciente\n";
         std::cout << "3. Modificar descripcion de un Servicio\n";
         std::cout << "4. Generar BackUp de Servicios\n";
-        std::cout << "5. Generar Fichero de Servicios\n";
-        std::cout << "6. Generar Fichero de Servicios por Paciente\n";
+        std::cout << "5. Generar Fichero de Historial Clinico de todos los pacientes\n";
+        std::cout << "6. Generar Fichero de Historial Clinico por Paciente\n";
         std::cout << "7. Salir\n";
         std::cout << "\nIntroduce un numero: ";
         std::cin >> opcion;
